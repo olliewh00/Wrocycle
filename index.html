@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DormSort Wrocław — Instant Waste Sorter</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Instant waste sorting app for university students living in Wrocław dormitories. Get split-second answers for pizza boxes, energy drink cans, and more. Bilingual PL/EN.">
+  <meta name="keywords" content="Wrocław, waste sorting, segregacja odpadów, dorms, studenci, kaucja, ekosystem">
+  <meta name="theme-color" content="#0b0f19">
+
+  <!-- Google Fonts: Outfit (headings) & Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Design Tokens & CSS Variables */
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(22, 29, 49, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-color: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      
+      /* Wrocław Fraction Colors */
+      --color-yellow: #ecc94b;
+      --color-blue: #3182ce;
+      --color-green: #38a169;
+      --color-brown: #b7791f;
+      --color-black: #1a202c;
+      --color-deposit: #dd6b20;
+
+      --text-dark: #1a202c;
+      --text-light: #ffffff;
+      
+      --font-headings: 'Outfit', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      
+      --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Global Reset & Base Styling */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, rgba(221, 107, 32, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Main Container (Mobile First, max width) */
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 40px;
+    }
+
+    /* Header Section */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: var(--font-headings);
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #60a5fa 0%, #f97316 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: -2px;
+    }
+
+    /* Language Switcher */
+    .lang-switcher {
+      display: flex;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 3px;
+      position: relative;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-headings);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .lang-btn.active {
+      background: #2563eb;
+      color: var(--text-light);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Search Bar Area */
+    .search-wrapper {
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-bar {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 48px 16px 16px;
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition-normal);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 16px var(--accent-glow), 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-icon-right {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-main);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    .clear-search-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Autocomplete Suggestions Dropdown */
+    .suggestions-list {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      background: #111827;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      max-height: 280px;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+    }
+
+    .suggestion-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition-fast);
+      font-size: 0.95rem;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-item:hover, .suggestion-item:focus-within {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .suggestion-name {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .suggestion-badge {
+      font-family: var(--font-headings);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    /* Quick Grid Section */
+    .section-title {
+      font-family: var(--font-headings);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .grid-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      color: var(--text-main);
+      transition: transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .grid-btn:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(22, 29, 49, 0.9);
+      transform: translateY(-2px);
+    }
+
+    .grid-btn:active {
+      transform: scale(0.96);
+    }
+
+    .grid-btn-icon {
+      font-size: 1.8rem;
+    }
+
+    .grid-btn-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* Cheat Sheet Section */
+    .cheat-sheet-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: var(--transition-normal);
+    }
+
+    .cheat-sheet-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cheat-sheet-header-title {
+      font-family: var(--font-headings);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cheat-sheet-arrow {
+      transition: transform var(--transition-normal);
+      color: var(--text-muted);
+    }
+
+    .cheat-sheet-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-normal);
+      padding: 0 18px;
+    }
+
+    .cheat-sheet-content.open {
+      padding-bottom: 18px;
+      max-height: 500px;
+    }
+
+    .cheat-sheet-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .cheat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .cheat-color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cheat-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cheat-fraction-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cheat-fraction-examples {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* Split-Second High-Contrast Result Modal */
+    .result-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      color: var(--text-light);
+      visibility: hidden;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .result-modal.active {
+      visibility: visible;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal-header {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 8px;
+    }
+
+    .close-modal-btn {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: currentColor;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .close-modal-btn:hover {
+      background: rgba(0, 0, 0, 0.35);
+      transform: scale(1.05);
+    }
+
+    .modal-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+    }
+
+    .modal-item-name {
+      font-family: var(--font-headings);
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      opacity: 0.9;
+    }
+
+    .modal-fraction-badge {
+      font-family: var(--font-headings);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-action-rule {
+      font-family: var(--font-headings);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      margin-top: 10px;
+      animation: pulse-rule 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-rule {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .modal-footer {
+      width: 100%;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .modal-close-hint {
+      font-family: var(--font-headings);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      animation: blink-text 1.5s infinite;
+    }
+
+    @keyframes blink-text {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.85; }
+    }
+
+    /* Footer Credits */
+    .app-footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .app-footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    /* Accessibility improvements */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="brand">
+        <h1 class="brand-title" id="app-title">DormSort WRO</h1>
+        <p class="brand-subtitle" id="app-subtitle">Błyskawiczny podział śmieci w akademiku</p>
+      </div>
+      
+      <!-- Bilingual Language Toggle -->
+      <div class="lang-switcher" role="radiogroup" aria-label="Wybierz język / Select language">
+        <button class="lang-btn active" id="lang-pl" onclick="setLanguage('pl')" role="radio" aria-checked="true">PL</button>
+        <button class="lang-btn" id="lang-en" onclick="setLanguage('en')" role="radio" aria-checked="false">EN</button>
+      </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-wrapper" aria-label="Wyszukiwarka odpadów / Waste search">
+      <label for="search-input" class="sr-only" id="search-label">Wyszukaj odpad, np. pizza, puszka</label>
+      <input 
+        type="text" 
+        id="search-input" 
+        class="search-bar" 
+        placeholder="Wpisz co wyrzucasz (np. pizza, puszka)..." 
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      >
+      <div class="search-icon-right" id="search-icon-container">
+        <!-- Magnifying glass SVG -->
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+      <button class="clear-search-btn" id="clear-btn" aria-label="Wyczyść szukanie" onclick="clearSearch()">
+        <!-- Close icon SVG -->
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <!-- Autocomplete Dropdown List -->
+      <ul class="suggestions-list" id="suggestions" role="listbox"></ul>
+    </section>
+
+    <!-- Top Dorm Trash Grid -->
+    <section>
+      <h2 class="section-title" id="grid-title">Najczęstsze w akademiku</h2>
+      <div class="quick-grid" id="quick-grid">
+        <!-- Dynamic Quick buttons populated in JS -->
+      </div>
+    </section>
+
+    <!-- Collapsible Wrocław Bin Cheat Sheet -->
+    <section class="cheat-sheet-container" aria-label="Zasady segregacji we Wrocławiu">
+      <div class="cheat-sheet-header" id="cheat-sheet-toggle" onclick="toggleCheatSheet()" role="button" aria-expanded="false" tabindex="0">
+        <span class="cheat-sheet-header-title">
+          <!-- Document icon SVG -->
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span id="cheat-title">Ściąga z wrocławskich frakcji</span>
+        </span>
+        <span class="cheat-sheet-arrow" id="cheat-arrow">
+          <!-- Down arrow SVG -->
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </span>
+      </div>
+      <div class="cheat-sheet-content" id="cheat-content">
+        <div class="cheat-sheet-grid" id="cheat-sheet-items">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Credits -->
+    <footer class="app-footer">
+      <p id="footer-text">Zasady zgodne z wytycznymi Ekosystem Wrocław 2026. System kaucyjny PL 2025.</p>
+    </footer>
+
+  </div>
+
+  <!-- Full-Screen Split-Second Result Screen Overlay -->
+  <div class="result-modal" id="result-modal" onclick="closeResult()">
+    <div class="modal-header">
+      <button class="close-modal-btn" aria-label="Zamknij" onclick="event.stopPropagation(); closeResult();">
+        <!-- Close icon SVG -->
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h2 class="modal-item-name" id="modal-item-name">Greasy Pizza Box</h2>
+      <span class="modal-fraction-badge" id="modal-fraction-badge">Mixed Waste</span>
+      <div class="modal-action-rule" id="modal-action-rule">THROW IN BLACK BIN - OILY</div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-close-hint" id="modal-close-hint">Tapnij gdziekolwiek, aby zamknąć</div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // Hardcoded Wrocław Waste Database (33 Common Items)
+    // ----------------------------------------------------
+    const wasteDatabase = [
+      // 1. PLASTICS & METALS (Yellow) - #ecc94b
+      {
+        id: "energy-drink-can",
+        name_en: "Energy Drink Can",
+        name_pl: "Puszka po energetyku",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "CRUSH AND THROW IN YELLOW BIN",
+        action_pl: "ZGNIEĆ I WRZUĆ DO ŻÓŁTEGO"
+      },
+      {
+        id: "plastic-bottle-pet",
+        name_en: "Plastic Bottle (Standard PET)",
+        name_pl: "Plastikowa butelka (zwykła PET)",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "CRUSH AND THROW IN YELLOW BIN",
+        action_pl: "ZGNIEĆ I WRZUĆ DO ŻÓŁTEGO"
+      },
+      {
+        id: "zabka-food-tray",
+        name_en: "Żabka Food Tray (Plastic)",
+        name_pl: "Tacka po gotowym daniu z Żabki",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "EMPTY AND THROW IN YELLOW BIN",
+        action_pl: "OPRÓŻNIJ I WRZUĆ DO ŻÓŁTEGO"
+      },
+      {
+        id: "milk-juice-carton",
+        name_en: "Milk / Juice Carton (Tetra Pak)",
+        name_pl: "Karton po mleku / soku (Tetra Pak)",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "CRUSH AND THROW IN YELLOW BIN",
+        action_pl: "ZGNIEĆ I WRZUĆ DO ŻÓŁTEGO"
+      },
+      {
+        id: "yogurt-cup",
+        name_en: "Yogurt Cup (Plastic)",
+        name_pl: "Kubeczek po jogurcie (plastikowy)",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "TEAR FOIL LID, THROW BOTH IN YEL",
+        action_pl: "ZERWIJ WIEczko, WRZUĆ DO ŻÓŁTEGO"
+      },
+      {
+        id: "yogurt-lid",
+        name_en: "Yogurt Cup Foil Lid",
+        name_pl: "Wieczko aluminiowe po jogurcie",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "THROW IN YELLOW BIN",
+        action_pl: "WRZUĆ DO ŻÓŁTEGO POJEMNIKA"
+      },
+      {
+        id: "chips-bag",
+        name_en: "Potato Chips Bag",
+        name_pl: "Paczka po chipsach",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "THROW IN YELLOW BIN",
+        action_pl: "WRZUĆ DO ŻÓŁTEGO POJEMNIKA"
+      },
+      {
+        id: "plastic-bag",
+        name_en: "Plastic Shopping Bag (Reklamówka)",
+        name_pl: "Reklamówka / Torba plastikowa",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "THROW IN YELLOW BIN",
+        action_pl: "WRZUĆ DO ŻÓŁTEGO POJEMNIKA"
+      },
+      {
+        id: "clean-foil",
+        name_en: "Clean Aluminium Foil",
+        name_pl: "Czysta folia aluminiowa",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "THROW IN YELLOW BIN",
+        action_pl: "WRZUĆ DO ŻÓŁTEGO POJEMNIKA"
+      },
+      {
+        id: "jar-lid",
+        name_en: "Metal Jar Lid",
+        name_pl: "Metalowa zakrętka od słoika",
+        fraction_en: "PLASTICS & METALS",
+        fraction_pl: "METALE I TWORZYWA",
+        color: "#ecc94b",
+        text_color: "#1a202c",
+        action_en: "THROW IN YELLOW BIN",
+        action_pl: "WRZUĆ DO ŻÓŁTEGO POJEMNIKA"
+      },
+
+      // 2. PAPER (Blue) - #3182ce
+      {
+        id: "clean-pizza-box",
+        name_en: "Pizza Box (Clean)",
+        name_pl: "Karton po pizzy (Czysty)",
+        fraction_en: "PAPER",
+        fraction_pl: "PAPIER",
+        color: "#3182ce",
+        text_color: "#ffffff",
+        action_en: "FLATTEN BOX, THROW IN BLUE BIN",
+        action_pl: "ZGNIEĆ KARTON, WRZUĆ DO NIEBIESKIEGO"
+      },
+      {
+        id: "delivery-box",
+        name_en: "Cardboard Delivery Box",
+        name_pl: "Karton wysyłkowy / Paczkomat",
+        fraction_en: "PAPER",
+        fraction_pl: "PAPIER",
+        color: "#3182ce",
+        text_color: "#ffffff",
+        action_en: "REMOVE TAPE AND THROW IN BLUE",
+        action_pl: "ODKLEJ TAŚMĘ, WRZUĆ DO NIEBIESKIEGO"
+      },
+      {
+        id: "notebook-paper",
+        name_en: "Notebook Paper / Exam Sheets",
+        name_pl: "Zeszyt / Notatki z zajęć",
+        fraction_en: "PAPER",
+        fraction_pl: "PAPIER",
+        color: "#3182ce",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLUE BIN",
+        action_pl: "WRZUĆ DO NIEBIESKIEGO POJEMNIKA"
+      },
+      {
+        id: "paper-bag",
+        name_en: "Paper Bag (Clean)",
+        name_pl: "Torba papierowa (czysta)",
+        fraction_en: "PAPER",
+        fraction_pl: "PAPIER",
+        color: "#3182ce",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLUE BIN",
+        action_pl: "WRZUĆ DO NIEBIESKIEGO POJEMNIKA"
+      },
+
+      // 3. GLASS (Green) - #38a169
+      {
+        id: "beer-bottle-glass",
+        name_en: "Glass Beer Bottle (No Deposit)",
+        name_pl: "Szklana butelka po piwie (bezzwrotna)",
+        fraction_en: "GLASS",
+        fraction_pl: "SZKŁO",
+        color: "#38a169",
+        text_color: "#ffffff",
+        action_en: "THROW IN GREEN BIN - NO LID",
+        action_pl: "WRZUĆ DO ZIELONEGO - BEZ KAPSA"
+      },
+      {
+        id: "wine-bottle",
+        name_en: "Glass Wine Bottle",
+        name_pl: "Butelka po winie (szklana)",
+        fraction_en: "GLASS",
+        fraction_pl: "SZKŁO",
+        color: "#38a169",
+        text_color: "#ffffff",
+        action_en: "THROW IN GREEN BIN - NO CORK",
+        action_pl: "WRZUĆ DO ZIELONEGO - BEZ KORKA"
+      },
+      {
+        id: "glass-jar",
+        name_en: "Glass Jar (Clean)",
+        name_pl: "Słoik szklany (czysty)",
+        fraction_en: "GLASS",
+        fraction_pl: "SZKŁO",
+        color: "#38a169",
+        text_color: "#ffffff",
+        action_en: "REMOVE LID, THROW IN GREEN BIN",
+        action_pl: "ZDEJMIJ ZAKRĘTKĘ, WRZUĆ DO ZIELONEGO"
+      },
+
+      // 4. BIO-WASTE (Brown) - #b7791f
+      {
+        id: "fruit-peel",
+        name_en: "Apple Core / Banana Peel",
+        name_pl: "Ogryzek jabłka / Skórka banana",
+        fraction_en: "BIO-WASTE",
+        fraction_pl: "BIOODPADY",
+        color: "#b7791f",
+        text_color: "#ffffff",
+        action_en: "THROW IN BROWN BIN - NO PLASTIC",
+        action_pl: "WRZUĆ DO BRĄZOWEGO - BEZ WORKA"
+      },
+      {
+        id: "coffee-grounds",
+        name_en: "Coffee Grounds",
+        name_pl: "Fusy po kawie",
+        fraction_en: "BIO-WASTE",
+        fraction_pl: "BIOODPADY",
+        color: "#b7791f",
+        text_color: "#ffffff",
+        action_en: "THROW IN BROWN BIN",
+        action_pl: "WRZUĆ DO BRĄZOWEGO POJEMNIKA"
+      },
+      {
+        id: "tea-bag",
+        name_en: "Tea Bag (Bio-degradable)",
+        name_pl: "Torebka po herbacie (biodegradowalna)",
+        fraction_en: "BIO-WASTE",
+        fraction_pl: "BIOODPADY",
+        color: "#b7791f",
+        text_color: "#ffffff",
+        action_en: "THROW IN BROWN BIN",
+        action_pl: "WRZUĆ DO BRĄZOWEGO POJEMNIKA"
+      },
+      {
+        id: "veg-peels",
+        name_en: "Vegetable Obierki / Peels",
+        name_pl: "Obierki z warzyw / Ziemniaków",
+        fraction_en: "BIO-WASTE",
+        fraction_pl: "BIOODPADY",
+        color: "#b7791f",
+        text_color: "#ffffff",
+        action_en: "THROW IN BROWN BIN - NO BAG",
+        action_pl: "WRZUĆ DO BRĄZOWEGO - BEZ WORKA"
+      },
+
+      // 5. MIXED WASTE (Black) - #1a202c
+      {
+        id: "greasy-pizza-box",
+        name_en: "Pizza Box (Greasy)",
+        name_pl: "Karton po pizzy (Brudny/Tłusty)",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - TOO OILY",
+        action_pl: "WRZUĆ DO CZARNEGO - TŁUSTY KARTON"
+      },
+      {
+        id: "kebab-wrapper",
+        name_en: "Kebab Foil Wrapper",
+        name_pl: "Folia po kebabie (tłusta)",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - OILY FOIL",
+        action_pl: "WRZUĆ DO CZARNEGO - TŁUSTA FOLIA"
+      },
+      {
+        id: "instant-noodle-cup",
+        name_en: "Instant Noodle Cup",
+        name_pl: "Kartonik/Kubek po zupce chińskiej",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - CONTAMINATED",
+        action_pl: "WRZUĆ DO CZARNEGO - ZABRUDZONY KUBEK"
+      },
+      {
+        id: "used-napkin",
+        name_en: "Used Napkin / Paper Towel",
+        name_pl: "Brudny ręcznik papierowy / serwetka",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN",
+        action_pl: "WRZUĆ DO CZARNEGO POJEMNIKA"
+      },
+      {
+        id: "styrofoam-box",
+        name_en: "Styrofoam Takeaway Box",
+        name_pl: "Pojemnik styropianowy na wynos",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN",
+        action_pl: "WRZUĆ DO CZARNEGO POJEMNIKA"
+      },
+      {
+        id: "receipt",
+        name_en: "Receipt (Thermal Paper)",
+        name_pl: "Paragon fiskalny",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - NOT RECYCLABLE",
+        action_pl: "WRZUĆ DO CZARNEGO - TO NIE PAPIER"
+      },
+      {
+        id: "bones-meat",
+        name_en: "Bones / Meat Leftovers",
+        name_pl: "Kości / Resztki mięsa i ryb",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - NO MEAT IN BIO",
+        action_pl: "WRZUĆ DO CZARNEGO - MIĘSO TO NIE BIO"
+      },
+      {
+        id: "cigarette-butt",
+        name_en: "Cigarette Butt",
+        name_pl: "Niedopałek papierosa",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN",
+        action_pl: "WRZUĆ DO CZARNEGO POJEMNIKA"
+      },
+      {
+        id: "broken-glassware",
+        name_en: "Broken Drinking Glass / Ceramic Mug",
+        name_pl: "Rozbity kubek / Szklanka do napoju",
+        fraction_en: "MIXED WASTE",
+        fraction_pl: "ZMIESZANE",
+        color: "#1a202c",
+        text_color: "#ffffff",
+        action_en: "THROW IN BLACK BIN - NOT GREEN BIN",
+        action_pl: "WRZUĆ DO CZARNEGO - TO NIE SZKŁO"
+      },
+
+      // 6. KAUCJA / DEPOSIT (Gold/Orange) - #dd6b20
+      {
+        id: "plastic-bottle-kaucja",
+        name_en: "Plastic Bottle (Kaucja/Deposit)",
+        name_pl: "Butelka plastikowa (kaucja/zwrotna)",
+        fraction_en: "KAUCJA / DEPOSIT",
+        fraction_pl: "KAUCJA / ZWROT",
+        color: "#dd6b20",
+        text_color: "#ffffff",
+        action_en: "DON'T CRUSH - RETURN TO STORE",
+        action_pl: "NIE ZGNIATAJ - ODDAJ DO AUTOMATU"
+      },
+      {
+        id: "energy-drink-kaucja",
+        name_en: "Energy Drink Can (Kaucja/Deposit)",
+        name_pl: "Puszka po napoju (kaucja/zwrotna)",
+        fraction_en: "KAUCJA / DEPOSIT",
+        fraction_pl: "KAUCJA / ZWROT",
+        color: "#dd6b20",
+        text_color: "#ffffff",
+        action_en: "DON'T CRUSH - RETURN TO STORE",
+        action_pl: "NIE ZGNIATAJ - ODDAJ DO AUTOMATU"
+      },
+      {
+        id: "beer-bottle-kaucja",
+        name_en: "Glass Beer Bottle (Kaucja/Deposit)",
+        name_pl: "Butelka szklana zwrotna (kaucja/zwrot)",
+        fraction_en: "KAUCJA / DEPOSIT",
+        fraction_pl: "KAUCJA / ZWROT",
+        color: "#dd6b20",
+        text_color: "#ffffff",
+        action_en: "RETURN TO STORE FOR DEPOSIT REFUND",
+        action_pl: "ODDAJ W SKLEPIE I ODBIERZ KAUCJĘ"
+      }
+    ];
+
+    // Top Dorm Trash Grid definitions
+    const quickGridItems = [
+      { id: "greasy-pizza-box", icon: "🍕", label_en: "Pizza Box (Greasy)", label_pl: "Pizza (Tłusta)" },
+      { id: "clean-pizza-box", icon: "📦", label_en: "Pizza Box (Clean)", label_pl: "Pizza (Czysta)" },
+      { id: "energy-drink-can", icon: "🥤", label_en: "Energy Drink Can", label_pl: "Puszka" },
+      { id: "zabka-food-tray", icon: "🍱", label_en: "Żabka Food Tray", label_pl: "Tacka Żabka" },
+      { id: "kebab-wrapper", icon: "🌯", label_en: "Kebab Foil Wrapper", label_pl: "Folia Kebab" },
+      { id: "milk-juice-carton", icon: "🥛", label_en: "Milk / Juice Carton", label_pl: "Karton Tetra" },
+      { id: "plastic-bottle-kaucja", icon: "🪙", label_en: "Bottle (Kaucja)", label_pl: "Butelka (Kaucja)" },
+      { id: "instant-noodle-cup", icon: "🍜", label_en: "Instant Noodle Cup", label_pl: "Zupka Chińska" }
+    ];
+
+    // UI Translations mapping
+    const uiTranslations = {
+      pl: {
+        title: "DormSort WRO",
+        subtitle: "Błyskawiczny podział śmieci w akademiku",
+        searchPlaceholder: "Wpisz co wyrzucasz (np. pizza, puszka)...",
+        gridTitle: "Najczęstsze w akademiku",
+        cheatTitle: "Ściąga z wrocławskich frakcji",
+        footerText: "Zasady zgodne z wytycznymi Ekosystem Wrocław 2026. System kaucyjny PL 2025.",
+        closeHint: "TAPNIJ GDZIEKOLWIEK, ABY ZAMKNĄĆ",
+        searchLabel: "Wyszukaj odpad, np. pizza, puszka",
+        fractions: {
+          "METALE I TWORZYWA": "Plastikowe butelki, zakrętki, puszki po napojach, kartony Tetra Pak, reklamówki",
+          "PAPIER": "Czysty karton, gazety, torebki papierowe, pudła bez taśmy klejącej",
+          "SZKŁO": "Szklane butelki i słoiki po napojach i żywności (bez nakrętek)",
+          "BIOODPADY": "Obierki owoców i warzyw, fusy po kawie (bez resztek zwierzęcych/mięsa)",
+          "ZMIESZANE": "Brudny papier/pizza, folia kebab, resztki jedzenia (w tym kości), paragony, ceramika",
+          "KAUCJA / ZWROT": "Niezgniecione butelki PET, puszki i butelki szklane z symbolem kaucji"
+        }
+      },
+      en: {
+        title: "DormSort WRO",
+        subtitle: "Instant waste sorting for Wrocław dorms",
+        searchPlaceholder: "Search what you're throwing away (e.g. pizza, can)...",
+        gridTitle: "Top Dorm Trash",
+        cheatTitle: "Wrocław Bin Cheat Sheet",
+        footerText: "Rules aligned with Ekosystem Wrocław 2026 guidelines. Polish Deposit System 2025.",
+        closeHint: "TAP ANYWHERE TO CLOSE",
+        searchLabel: "Search waste item, e.g. pizza, energy drink",
+        fractions: {
+          "PLASTICS & METALS": "Plastic bottles, caps, soda cans, Tetra Pak cartons, shopping bags",
+          "PAPER": "Clean cardboard, newspapers, paper bags, delivery boxes without tape",
+          "GLASS": "Glass bottles and jars for beverages and food (remove lids first)",
+          "BIO-WASTE": "Fruit and veg peels, coffee grounds (no meat, bones, or dairy)",
+          "MIXED WASTE": "Oily paper/pizza box, kebab foil, food scraps (incl. bones), receipts, ceramics",
+          "KAUCJA / DEPOSIT": "Uncrushed PET bottles, cans, and returnable beer bottles with deposit logo"
+        }
+      }
+    };
+
+    // State Variables
+    let currentLang = 'pl';
+
+    // Elements
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-btn');
+    const suggestionsList = document.getElementById('suggestions');
+    const quickGrid = document.getElementById('quick-grid');
+    const cheatSheetItems = document.getElementById('cheat-sheet-items');
+    
+    // Modal Elements
+    const resultModal = document.getElementById('result-modal');
+    const modalItemName = document.getElementById('modal-item-name');
+    const modalFractionBadge = document.getElementById('modal-fraction-badge');
+    const modalActionRule = document.getElementById('modal-action-rule');
+    const modalCloseHint = document.getElementById('modal-close-hint');
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      // Setup language from localStorage if available, or browser locale
+      const savedLang = localStorage.getItem('dormsort_lang');
+      if (savedLang === 'pl' || savedLang === 'en') {
+        currentLang = savedLang;
+      } else {
+        const userLocale = navigator.language || navigator.userLanguage;
+        currentLang = userLocale.startsWith('pl') ? 'pl' : 'en';
+      }
+
+      setLanguage(currentLang);
+      
+      // Auto-focus input on load for ultra-fast typing interaction
+      // Prevent automatic virtual keyboard popup on mobile immediately, but allow active cursor state
+      searchInput.focus();
+
+      // Listen for search input changes
+      searchInput.addEventListener('input', handleSearch);
+
+      // Dismiss dropdown on click outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          suggestionsList.style.display = 'none';
+        }
+      });
+
+      // Pressing enter in search triggers first suggestion if visible
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const visibleItems = suggestionsList.querySelectorAll('.suggestion-item');
+          if (visibleItems.length > 0) {
+            visibleItems[0].click();
+          }
+        }
+      });
+    });
+
+    // Toggle language
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('dormsort_lang', lang);
+
+      // Update button classes
+      document.getElementById('lang-pl').classList.toggle('active', lang === 'pl');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      document.getElementById('lang-pl').setAttribute('aria-checked', lang === 'pl');
+      document.getElementById('lang-en').setAttribute('aria-checked', lang === 'en');
+
+      // Update static page text
+      document.getElementById('app-title').innerText = uiTranslations[lang].title;
+      document.getElementById('app-subtitle').innerText = uiTranslations[lang].subtitle;
+      document.getElementById('search-label').innerText = uiTranslations[lang].searchLabel;
+      searchInput.placeholder = uiTranslations[lang].searchPlaceholder;
+      document.getElementById('grid-title').innerText = uiTranslations[lang].gridTitle;
+      document.getElementById('cheat-title').innerText = uiTranslations[lang].cheatTitle;
+      document.getElementById('footer-text').innerText = uiTranslations[lang].footerText;
+      modalCloseHint.innerText = uiTranslations[lang].closeHint;
+
+      // Re-populate layout components
+      buildQuickGrid();
+      buildCheatSheet();
+
+      // Clear search suggestions if any currently rendered
+      handleSearch();
+    }
+
+    // Build Touch Grid items
+    function buildQuickGrid() {
+      quickGrid.innerHTML = '';
+      quickGridItems.forEach(item => {
+        const label = currentLang === 'pl' ? item.label_pl : item.label_en;
+        
+        const btn = document.createElement('button');
+        btn.className = 'grid-btn';
+        btn.id = `btn-${item.id}`;
+        btn.innerHTML = `
+          <span class="grid-btn-icon">${item.icon}</span>
+          <span class="grid-btn-text">${label}</span>
+        `;
+        
+        // Instant trigger on click
+        btn.addEventListener('click', () => {
+          showResult(item.id);
+        });
+        
+        quickGrid.appendChild(btn);
+      });
+    }
+
+    // Build the accordion cheat sheet
+    function buildCheatSheet() {
+      cheatSheetItems.innerHTML = '';
+      const fractionsMap = uiTranslations[currentLang].fractions;
+      
+      // Match each fraction in Polish / English
+      const colorMap = {
+        "METALE I TWORZYWA": { color: "var(--color-yellow)", name: "Tworzywa sztuczne i metale" },
+        "PLASTICS & METALS": { color: "var(--color-yellow)", name: "Plastik & Metale / Yellow" },
+        
+        "PAPIER": { color: "var(--color-blue)", name: "Papier / Blue" },
+        "PAPER": { color: "var(--color-blue)", name: "Paper / Blue" },
+        
+        "SZKŁO": { color: "var(--color-green)", name: "Szkło / Green" },
+        "GLASS": { color: "var(--color-green)", name: "Glass / Green" },
+        
+        "BIOODPADY": { color: "var(--color-brown)", name: "Bio / Brown" },
+        "BIO-WASTE": { color: "var(--color-brown)", name: "Bio-waste / Brown" },
+        
+        "ZMIESZANE": { color: "var(--color-black)", name: "Zmieszane / Black" },
+        "MIXED WASTE": { color: "var(--color-black)", name: "Mixed waste / Black" },
+        
+        "KAUCJA / ZWROT": { color: "var(--color-deposit)", name: "Kaucja / Deposit" },
+        "KAUCJA / DEPOSIT": { color: "var(--color-deposit)", name: "Kaucja / Deposit" }
+      };
+
+      Object.keys(fractionsMap).forEach(fractionKey => {
+        const meta = colorMap[fractionKey] || { color: '#ffffff', name: fractionKey };
+        const desc = fractionsMap[fractionKey];
+        
+        const item = document.createElement('div');
+        item.className = 'cheat-item';
+        item.innerHTML = `
+          <div class="cheat-color-dot" style="background-color: ${meta.color}; border: 1px solid rgba(255,255,255,0.2);"></div>
+          <div class="cheat-text">
+            <span class="cheat-fraction-name" style="color: ${meta.color === 'var(--color-black)' ? '#e2e8f0' : meta.color}">${meta.name}</span>
+            <span class="cheat-fraction-examples">${desc}</span>
+          </div>
+        `;
+        cheatSheetItems.appendChild(item);
+      });
+    }
+
+    // Toggle Cheat Sheet accordion open state
+    function toggleCheatSheet() {
+      const content = document.getElementById('cheat-content');
+      const arrow = document.getElementById('cheat-arrow');
+      const header = document.getElementById('cheat-sheet-toggle');
+      
+      const isOpen = content.classList.contains('open');
+      
+      if (isOpen) {
+        content.classList.remove('open');
+        arrow.style.transform = 'rotate(0deg)';
+        header.setAttribute('aria-expanded', 'false');
+      } else {
+        content.classList.add('open');
+        arrow.style.transform = 'rotate(180deg)';
+        header.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // Search and Autocomplete mechanism
+    function handleSearch() {
+      const val = searchInput.value.trim().toLowerCase();
+      
+      if (!val) {
+        clearBtn.style.display = 'none';
+        suggestionsList.innerHTML = '';
+        suggestionsList.style.display = 'none';
+        return;
+      }
+      
+      clearBtn.style.display = 'flex';
+
+      // Perform a soft matching in names (both PL and EN to make it smart)
+      // Normalize Polish characters slightly for better user matching
+      const cleanString = (str) => {
+        return str.toLowerCase()
+                  .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove diacritics
+                  .replace(/ł/g, 'l');
+      };
+
+      const searchValClean = cleanString(val);
+
+      const filtered = wasteDatabase.filter(item => {
+        const plMatch = cleanString(item.name_pl).includes(searchValClean);
+        const enMatch = cleanString(item.name_en).includes(searchValClean);
+        return plMatch || enMatch;
+      });
+
+      // Show list of matching items
+      if (filtered.length > 0) {
+        suggestionsList.innerHTML = '';
+        filtered.forEach(item => {
+          const displayName = currentLang === 'pl' ? item.name_pl : item.name_en;
+          const displayFraction = currentLang === 'pl' ? item.fraction_pl : item.fraction_en;
+          
+          const li = document.createElement('li');
+          li.className = 'suggestion-item';
+          li.setAttribute('role', 'option');
+          li.innerHTML = `
+            <span class="suggestion-name">${highlightText(displayName, val)}</span>
+            <span class="suggestion-badge" style="background-color: ${item.color}; color: ${item.text_color}; border: 1px solid rgba(255,255,255,0.15)">
+              ${displayFraction}
+            </span>
+          `;
+          
+          // Tap suggestion -> Instant show
+          li.addEventListener('click', () => {
+            showResult(item.id);
+            suggestionsList.style.display = 'none';
+          });
+          
+          suggestionsList.appendChild(li);
+        });
+        
+        suggestionsList.style.display = 'flex';
+      } else {
+        // No results matched
+        suggestionsList.innerHTML = `
+          <div style="padding: 18px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+            ${currentLang === 'pl' ? 'Nie znaleziono takiego odpadu 🥺' : 'No waste item found 🥺'}
+          </div>
+        `;
+        suggestionsList.style.display = 'flex';
+      }
+    }
+
+    // Highlight typed characters inside result
+    function highlightText(text, searchWord) {
+      if (!searchWord) return text;
+      // Search case insensitive and without accent markers if possible
+      try {
+        const regex = new RegExp(`(${searchWord})`, 'gi');
+        return text.replace(regex, '<strong>$1</strong>');
+      } catch (e) {
+        return text;
+      }
+    }
+
+    // Clear search
+    function clearSearch() {
+      searchInput.value = '';
+      handleSearch();
+      searchInput.focus();
+    }
+
+    // Display high contrast full-screen result page
+    function showResult(itemId) {
+      const item = wasteDatabase.find(x => x.id === itemId);
+      if (!item) return;
+
+      const itemName = currentLang === 'pl' ? item.name_pl : item.name_en;
+      const itemFraction = currentLang === 'pl' ? item.fraction_pl : item.fraction_en;
+      const itemAction = currentLang === 'pl' ? item.action_pl : item.action_en;
+
+      // Populate layout details
+      modalItemName.innerText = itemName;
+      modalFractionBadge.innerText = itemFraction;
+      modalActionRule.innerText = itemAction.toUpperCase();
+      
+      // Update background with color coding block
+      resultModal.style.backgroundColor = item.color;
+      resultModal.style.color = item.text_color;
+
+      // Toggle active states
+      resultModal.classList.add('active');
+      
+      // Hide software keyboard on mobile for visual focus
+      document.activeElement.blur();
+    }
+
+    // Close the full-screen result page
+    function closeResult() {
+      resultModal.classList.remove('active');
+      // Keep input focused to let students search another item immediately
+      searchInput.focus();
+    }
+  </script>
+</body>
+</html>
