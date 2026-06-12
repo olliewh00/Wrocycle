@@ -15,8 +15,8 @@ Your task is to analyze the image of a piece of waste and classify it strictly a
 Analyze the image and return a strict, minified JSON object with NO markdown formatting (no ```json code blocks, just raw JSON) containing exactly the following keys:
 {
   "item_identified": "Short, specific name of the item (e.g., Oily Pizza Box)",
-  "fraction": "PLASTICS & METALS | PAPER | GLASS | BIO-WASTE | MIXED WASTE | KAUCJA",
-  "bin_color": "YELLOW | BLUE | GREEN | BROWN | BLACK | STORE RETURN",
+  "fraction": "PLASTICS & METALS | PAPER | GLASS | BIO-WASTE | MIXED WASTE | KAUCJA | CLOTHES & BATTERIES",
+  "bin_color": "YELLOW | BLUE | GREEN | BROWN | BLACK | STORE RETURN | RED",
   "action_required": "A 3-to-5 word action phrase in all-caps (e.g., DO NOT WASH, CRUSH IT, SEPARATE LID, THROW IN BLACK BIN IF OILY)"
 }
 
@@ -40,6 +40,12 @@ Rules for fractions & bin_color mapping:
      * Aluminum beverage cans (up to 1 liter)
      * Glass bottles (up to 1.5 liters)
      * If the item is a standard returnable bottle or can, classify it as KAUCJA / STORE RETURN to encourage returning it for the deposit refund!
+7. CLOTHES & BATTERIES (RED):
+   - Special disposal items. Applies to:
+     * Old clothes, shoes, bags, textiles
+     * Alkaline or rechargeable batteries, phone/laptop batteries
+     * Small electronic items (e-waste, chargers, lightbulbs)
+     * CRITICAL RULE: These CANNOT go in standard trash bins. Clothes go to clothing bins/donation. Batteries and e-waste must be taken to special store return boxes or PSZOK.
 
 CRITICAL: Return ONLY a raw JSON string. Do not include markdown code block syntax (like ```json ... ```). Validate that the JSON contains exactly the keys listed above and values match the allowed options.
 """
@@ -95,10 +101,12 @@ def classify_waste(image: Image.Image) -> dict:
 
 def _classify_gemini(image: Image.Image, api_key: str) -> dict:
     """
-    Classifies the image using Google's new GenAI SDK.
+    Classifies the image using Google's new GenAI SDK with exponential backoff retries.
     """
     from google import genai
     from google.genai import types
+    from google.genai.errors import APIError
+    import time
     
     model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     client = genai.Client(api_key=api_key)
@@ -107,29 +115,57 @@ def _classify_gemini(image: Image.Image, api_key: str) -> dict:
     if image.mode != "RGB":
         image = image.convert("RGB")
         
-    try:
-        # Call Gemini Vision API
-        response = client.models.generate_content(
-            model=model_name,
-            contents=[image, SYSTEM_INSTRUCTION],
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json"
+    max_retries = 3
+    delay = 1.0  # seconds
+    
+    for attempt in range(max_retries + 1):
+        try:
+            # Call Gemini Vision API
+            response = client.models.generate_content(
+                model=model_name,
+                contents=[image, SYSTEM_INSTRUCTION],
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
             )
-        )
-        
-        if not response.text:
-            raise ValueError("Gemini returned an empty response.")
             
-        return parse_json_response(response.text)
-        
-    except Exception as e:
-        raise RuntimeError(f"Error calling Google Gemini API: {str(e)}") from e
+            if not response.text:
+                raise ValueError("Gemini returned an empty response.")
+                
+            return parse_json_response(response.text)
+            
+        except APIError as api_err:
+            error_code = getattr(api_err, "code", None)
+            error_msg = str(api_err).upper()
+            
+            is_retryable = (
+                error_code in [429, 500, 503, 504] or
+                any(kw in error_msg for kw in ["500", "503", "429", "INTERNAL", "UNAVAILABLE", "TIMEOUT", "RESOURCE_EXHAUSTED"])
+            )
+            
+            if is_retryable and attempt < max_retries:
+                time.sleep(delay)
+                delay *= 2.0
+                continue
+            raise RuntimeError(f"Error calling Google Gemini API: {str(api_err)}") from api_err
+            
+        except Exception as e:
+            err_msg = str(e).upper()
+            is_retryable_exception = any(kw in err_msg for kw in ["500", "503", "429", "INTERNAL", "UNAVAILABLE", "TIMEOUT", "CONNECTION", "RESET", "EOF"])
+            
+            if is_retryable_exception and attempt < max_retries:
+                time.sleep(delay)
+                delay *= 2.0
+                continue
+            raise RuntimeError(f"Error calling Google Gemini API: {str(e)}") from e
 
 def _classify_openai(image: Image.Image, api_key: str) -> dict:
     """
-    Classifies the image using OpenAI's API.
+    Classifies the image using OpenAI's API with exponential backoff retries.
     """
     from openai import OpenAI
+    from openai import APIError
+    import time
     
     model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     client = OpenAI(api_key=api_key)
@@ -143,32 +179,58 @@ def _classify_openai(image: Image.Image, api_key: str) -> dict:
     image.save(buffered, format="JPEG")
     img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
     
-    try:
-        # Call OpenAI Chat Completions API with vision
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": SYSTEM_INSTRUCTION},
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{img_b64}"
+    max_retries = 3
+    delay = 1.0  # seconds
+    
+    for attempt in range(max_retries + 1):
+        try:
+            # Call OpenAI Chat Completions API with vision
+            response = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": SYSTEM_INSTRUCTION},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/jpeg;base64,{img_b64}"
+                                }
                             }
-                        }
-                    ]
-                }
-            ],
-            response_format={"type": "json_object"}
-        )
-        
-        response_text = response.choices[0].message.content
-        if not response_text:
-            raise ValueError("OpenAI returned an empty response.")
+                        ]
+                    }
+                ],
+                response_format={"type": "json_object"}
+            )
             
-        return parse_json_response(response_text)
-        
-    except Exception as e:
-        raise RuntimeError(f"Error calling OpenAI API: {str(e)}") from e
+            response_text = response.choices[0].message.content
+            if not response_text:
+                raise ValueError("OpenAI returned an empty response.")
+                
+            return parse_json_response(response_text)
+            
+        except APIError as api_err:
+            error_code = getattr(api_err, "status_code", None)
+            error_msg = str(api_err).upper()
+            
+            is_retryable = (
+                error_code in [429, 500, 502, 503, 504] or
+                any(kw in error_msg for kw in ["429", "500", "502", "503", "504", "RATE_LIMIT", "INTERNAL", "TIMEOUT"])
+            )
+            
+            if is_retryable and attempt < max_retries:
+                time.sleep(delay)
+                delay *= 2.0
+                continue
+            raise RuntimeError(f"Error calling OpenAI API: {str(api_err)}") from api_err
+            
+        except Exception as e:
+            err_msg = str(e).upper()
+            is_retryable_exception = any(kw in err_msg for kw in ["500", "503", "429", "INTERNAL", "UNAVAILABLE", "TIMEOUT", "CONNECTION", "RESET", "EOF"])
+            
+            if is_retryable_exception and attempt < max_retries:
+                time.sleep(delay)
+                delay *= 2.0
+                continue
+            raise RuntimeError(f"Error calling OpenAI API: {str(e)}") from e
