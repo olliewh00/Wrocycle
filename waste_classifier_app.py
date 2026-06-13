@@ -539,7 +539,7 @@ with tab_home:
 # -----------------------------------------------------------------------------
 with tab_game:
     # Read wrocycle_game.html with css header/footer stripper
-    filepath = "/Users/ryanoliver/Desktop/Business Intelligence /Creative/stitch_screens/wrocycle_game.html"
+    filepath = os.path.join(os.path.dirname(__file__), "stitch_screens", "wrocycle_game.html")
     if os.path.exists(filepath):
         with open(filepath, "r", encoding="utf-8") as f:
             html_content = f.read()
