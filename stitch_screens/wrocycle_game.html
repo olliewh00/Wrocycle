@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EkoSzkoła | Gra Edukacyjna - Sortuj Odpady</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .game-card-shadow {
+            box-shadow: 0 20px 40px rgba(0, 77, 39, 0.08);
+        }
+        .drop-zone-active {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+            transition: all 0.2s ease-out;
+            z-index: 30;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+        .swipe-indicator {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .card-inner-shadow {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "waste-yellow": "#FFD200",
+                      "primary-fixed-dim": "#83d99c",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-secondary-container": "#004866",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "on-tertiary-container": "#ffc3c5",
+                      "primary-container": "#006837",
+                      "tertiary-fixed": "#ffdada",
+                      "secondary": "#00658d",
+                      "secondary-fixed-dim": "#82cfff",
+                      "background": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "tertiary": "#762730",
+                      "on-tertiary-fixed-variant": "#7b2b34",
+                      "on-secondary-fixed": "#001e2d",
+                      "on-surface": "#191c1d",
+                      "on-primary-fixed-variant": "#00522a",
+                      "surface": "#f8f9fa",
+                      "primary": "#004d27",
+                      "secondary-container": "#2dbcfe",
+                      "waste-black": "#1A1A1A",
+                      "on-primary-container": "#8ee4a6",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#0b6d3b",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#edeeef",
+                      "on-primary-fixed": "#00210e",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container-lowest": "#ffffff",
+                      "clean-white": "#FFFFFF",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "tertiary-container": "#943e46",
+                      "tertiary-fixed-dim": "#ffb3b6",
+                      "outline-variant": "#bec9be",
+                      "on-secondary-fixed-variant": "#004c6b",
+                      "primary-fixed": "#9ef6b6",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-tertiary": "#ffffff",
+                      "waste-brown": "#8C6239",
+                      "surface-dim": "#d9dadb",
+                      "inverse-primary": "#83d99c",
+                      "surface-container-low": "#f3f4f5",
+                      "on-error-container": "#93000a",
+                      "waste-blue": "#0072BC",
+                      "surface-container-high": "#e7e8e9",
+                      "on-surface-variant": "#3f4940",
+                      "outline": "#6f7a70",
+                      "on-tertiary-fixed": "#40000c",
+                      "secondary-fixed": "#c6e7ff",
+                      "waste-green": "#009444"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "container-max": "1200px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Plus Jakarta Sans"],
+                      "caption": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface/90 dark:bg-surface-dim/90 docked full-width top-0 sticky backdrop-blur-md shadow-sm z-50 h-20">
+<div class="max-w-[1200px] mx-auto flex justify-between items-center px-margin-desktop h-full">
+<div class="text-headline-md font-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">
+            EkoSzkoła
+        </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Główna</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Zasady Segregacji</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary font-bold pb-1 font-label-md text-label-md" href="#">Gra Edukacyjna</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">O projekcie</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<button class="font-bold text-primary">PL</button>
+<span class="text-outline-variant">|</span>
+<button class="hover:text-primary transition-colors">EN</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all">
+                Zaloguj się
+            </button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center relative overflow-hidden px-4 py-8">
+<!-- Game Interface -->
+<div class="relative z-10 w-full max-w-4xl flex flex-col items-center">
+<!-- Header & Score -->
+<div class="w-full flex flex-col md:flex-row justify-between items-center md:items-end mb-8 gap-6">
+<div class="space-y-1 text-center md:text-left">
+<h1 class="font-headline-lg text-headline-lg text-primary">Sort It Out!</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+                    Przesuwaj kartę z odpadem w odpowiednim kierunku, aby go posegregować.<br/>
+<span class="opacity-70 italic">Swipe the waste card in the correct direction to sort it.</span>
+</p>
+</div>
+<div class="bg-clean-white px-8 py-4 rounded-xl game-card-shadow flex items-center gap-4 border border-outline-variant/30">
+<div class="text-right">
+<span class="block font-caption text-caption text-on-surface-variant uppercase tracking-wider">Twój Wynik / Your Score</span>
+<span class="block font-display-lg text-display-lg text-primary leading-none" id="score-counter">00</span>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<div class="text-right">
+<span class="block font-caption text-caption text-on-surface-variant uppercase tracking-wider">Czas / Time</span>
+<span class="block font-headline-md text-headline-md text-secondary leading-none" id="timer">01:30</span>
+</div>
+</div>
+</div>
+<!-- Game Arena (Cross Layout) -->
+<div class="relative w-full max-w-[600px] aspect-square flex items-center justify-center">
+<!-- TOP ZONE: Metale i Tworzywa -->
+<div class="absolute top-0 w-full flex flex-col items-center transition-all duration-300 pointer-events-none" id="zone-up">
+<div class="w-32 h-20 md:w-40 md:h-24 bg-waste-yellow rounded-xl flex flex-col items-center justify-center text-white shadow-lg border-2 border-white/20">
+<span class="material-symbols-outlined text-2xl md:text-3xl" style="font-variation-settings: 'FILL' 1;">recycling</span>
+<span class="font-label-md text-[9px] md:text-[10px] leading-tight px-2 uppercase font-bold text-center">METALE I TWORZYWA</span>
+<span class="font-label-md text-[8px] md:text-[9px] leading-tight px-2 opacity-90 uppercase text-center">METALS &amp; PLASTICS</span>
+</div>
+<div class="swipe-indicator opacity-40 mt-2 flex flex-col items-center text-waste-yellow font-bold text-[10px]">
+<span class="material-symbols-outlined animate-bounce">keyboard_double_arrow_up</span>
+<span class="uppercase tracking-widest">GÓRA / UP</span>
+</div>
+</div>
+<!-- LEFT ZONE: Szkło -->
+<div class="absolute left-0 h-full flex items-center transition-all duration-300 pointer-events-none" id="zone-left">
+<div class="flex items-center gap-2">
+<div class="swipe-indicator opacity-40 flex flex-col items-center text-waste-green font-bold text-[10px] rotate-[-90deg]">
+<span class="material-symbols-outlined animate-bounce">keyboard_double_arrow_up</span>
+</div>
+<div class="w-20 h-32 md:w-24 md:h-40 bg-waste-green rounded-xl flex flex-col items-center justify-center text-white shadow-lg border-2 border-white/20">
+<span class="material-symbols-outlined text-2xl md:text-3xl" style="font-variation-settings: 'FILL' 1;">liquor</span>
+<span class="font-label-md text-[9px] md:text-[10px] leading-tight px-1 uppercase font-bold text-center">SZKŁO</span>
+<span class="font-label-md text-[8px] md:text-[9px] leading-tight px-1 opacity-90 uppercase text-center">GLASS</span>
+</div>
+</div>
+</div>
+<!-- RIGHT ZONE: Zmieszane -->
+<div class="absolute right-0 h-full flex items-center transition-all duration-300 pointer-events-none" id="zone-right">
+<div class="flex items-center gap-2">
+<div class="w-20 h-32 md:w-24 md:h-40 bg-waste-black rounded-xl flex flex-col items-center justify-center text-white shadow-lg border-2 border-white/20">
+<span class="material-symbols-outlined text-2xl md:text-3xl" style="font-variation-settings: 'FILL' 1;">delete</span>
+<span class="font-label-md text-[9px] md:text-[10px] leading-tight px-1 uppercase font-bold text-center">ZMIESZANE</span>
+<span class="font-label-md text-[8px] md:text-[9px] leading-tight px-1 opacity-90 uppercase text-center">RESIDUAL</span>
+</div>
+<div class="swipe-indicator opacity-40 flex flex-col items-center text-waste-black font-bold text-[10px] rotate-[90deg]">
+<span class="material-symbols-outlined animate-bounce">keyboard_double_arrow_up</span>
+</div>
+</div>
+</div>
+<!-- BOTTOM ZONE: Papier -->
+<div class="absolute bottom-0 w-full flex flex-col items-center transition-all duration-300 pointer-events-none" id="zone-down">
+<div class="swipe-indicator opacity-40 mb-2 flex flex-col items-center text-waste-blue font-bold text-[10px]">
+<span class="uppercase tracking-widest">DÓŁ / DOWN</span>
+<span class="material-symbols-outlined animate-bounce">keyboard_double_arrow_down</span>
+</div>
+<div class="w-32 h-20 md:w-40 md:h-24 bg-waste-blue rounded-xl flex flex-col items-center justify-center text-white shadow-lg border-2 border-white/20">
+<span class="material-symbols-outlined text-2xl md:text-3xl" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label-md text-[9px] md:text-[10px] leading-tight px-2 uppercase font-bold text-center">PAPIER</span>
+<span class="font-label-md text-[8px] md:text-[9px] leading-tight px-2 opacity-90 uppercase text-center">PAPER</span>
+</div>
+</div>
+<!-- CENTRAL SWIPEABLE CARD -->
+<div class="z-20 w-64 h-80 bg-clean-white rounded-3xl game-card-shadow cursor-grab active:cursor-grabbing transform transition-all duration-300 flex flex-col overflow-hidden border border-outline-variant/50 relative" id="game-card">
+<!-- Tinder-style feedback overlays -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-200" id="feedback-overlay">
+<div class="bg-white/90 rounded-full p-4 shadow-xl">
+<span class="material-symbols-outlined text-6xl" id="feedback-icon">check_circle</span>
+</div>
+</div>
+<div class="flex-grow p-6 bg-surface-container-lowest flex items-center justify-center card-inner-shadow">
+<div class="w-full h-full rounded-2xl bg-white flex items-center justify-center p-4 border border-outline-variant/10">
+<img alt="Kawałek odpadu" class="w-full h-full object-contain mix-blend-multiply" id="trash-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR_x07JThJgnlnArZKnpZzmLZwgNqKRBa1HIr2r6wErXfrMXCZFYgBxhNt4rn6X91sHDGUO4Zco_RFgbJmIvlrAXUUfE9JeHo4qVEmi5nWTmwKhGVEiQGSV3lI3YqPfooloXfYw5wKFRU_RpPOmEZJAjmmcXdh7QSUJdQ9N1ll8n8ZExpx5JrORDlktyYrgbcuR_0TjncKCWFoB6YkILGdY7fB6btSfBJiJw-GuWL8MXAzgthH6gDMYqaUglhRLvpqxTLMYgyE0rUG"/>
+</div>
+</div>
+<div class="h-28 flex flex-col justify-center px-6 bg-white border-t border-surface-variant/30">
+<div class="flex flex-col text-center" id="trash-name-container">
+<span class="font-headline-md text-headline-md text-on-surface leading-tight" id="trash-name-pl">Plastikowa butelka</span>
+<span class="font-label-md text-label-md text-on-surface-variant/60 italic" id="trash-name-en">Plastic bottle</span>
+</div>
+<!-- Swipe progress dots -->
+<div class="flex justify-center gap-1 mt-3">
+<div class="w-1.5 h-1.5 rounded-full bg-primary/20"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/20"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- How To Play Instructions -->
+<div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl px-4">
+<div class="bg-waste-yellow/10 border border-waste-yellow/20 p-3 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-waste-yellow">arrow_upward</span>
+<div class="text-[11px] leading-tight">
+<p class="font-bold">Góra / Up</p>
+<p class="text-on-surface-variant">Metale/Plastik</p>
+</div>
+</div>
+<div class="bg-waste-blue/10 border border-waste-blue/20 p-3 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-waste-blue">arrow_downward</span>
+<div class="text-[11px] leading-tight">
+<p class="font-bold">Dół / Down</p>
+<p class="text-on-surface-variant">Papier / Paper</p>
+</div>
+</div>
+<div class="bg-waste-green/10 border border-waste-green/20 p-3 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-waste-green">arrow_back</span>
+<div class="text-[11px] leading-tight">
+<p class="font-bold">Lewo / Left</p>
+<p class="text-on-surface-variant">Szkło / Glass</p>
+</div>
+</div>
+<div class="bg-waste-black/10 border border-waste-black/20 p-3 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-waste-black">arrow_forward</span>
+<div class="text-[11px] leading-tight">
+<p class="font-bold">Prawo / Right</p>
+<p class="text-on-surface-variant">Zmieszane / Mixed</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface full-width mt-auto border-t border-surface-variant/30">
+<div class="max-w-[1200px] mx-auto py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
+<div class="flex flex-col items-center md:items-start gap-2">
+<div class="font-headline-md text-primary dark:text-primary-fixed-dim font-bold">EkoSzkoła</div>
+<p class="text-on-surface-variant dark:text-surface-variant font-body-md text-body-md">© 2024 EkoSzkoła Polska. Razem dla czystej planety.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary hover:underline decoration-2 underline-offset-4 transition-colors font-label-md text-label-md" href="#">Polityka Prywatności</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary hover:underline decoration-2 underline-offset-4 transition-colors font-label-md text-label-md" href="#">Kontakt</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary hover:underline decoration-2 underline-offset-4 transition-colors font-label-md text-label-md" href="#">Eko-Poradnik</a>
+</div>
+</div>
+</footer>
+<script>
+    const card = document.getElementById('game-card');
+    const scoreEl = document.getElementById('score-counter');
+    const trashImage = document.getElementById('trash-image');
+    const trashNamePl = document.getElementById('trash-name-pl');
+    const trashNameEn = document.getElementById('trash-name-en');
+    const overlay = document.getElementById('feedback-overlay');
+    const feedbackIcon = document.getElementById('feedback-icon');
+    
+    let score = 0;
+    let isDragging = false;
+    let startX, startY;
+    let currentX, currentY;
+
+    const wasteItems = [
+        { namePl: "Szklana butelka", nameEn: "Glass bottle", category: "left", img: "https://images.unsplash.com/photo-1596701062351-be5f6a45556d?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Plastikowa butelka", nameEn: "Plastic bottle", category: "up", img: "https://images.unsplash.com/photo-1591872203534-278fc084969e?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Stara gazeta", nameEn: "Old newspaper", category: "down", img: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Puszka po napoju", nameEn: "Soda can", category: "up", img: "https://images.unsplash.com/photo-1525381834241-11880461877e?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Słoik po dżemie", nameEn: "Jam jar", category: "left", img: "https://images.unsplash.com/photo-1621319011735-27521193455f?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Resztki obiadu", nameEn: "Food leftovers", category: "right", img: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Karton po mleku", nameEn: "Milk carton", category: "up", img: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=800&auto=format&fit=crop" },
+        { namePl: "Pudełko tekturowe", nameEn: "Cardboard box", category: "down", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop" }
+    ];
+
+    let currentItemIndex = 1;
+
+    function updateCard() {
+        const item = wasteItems[currentItemIndex];
+        trashNamePl.textContent = item.namePl;
+        trashNameEn.textContent = item.nameEn;
+        trashImage.src = item.img;
+        
+        // Reset styles
+        card.style.transform = 'translate(0, 0) rotate(0deg)';
+        card.style.opacity = '1';
+        overlay.style.opacity = '0';
+        
+        // Visual reset for zones
+        ['up', 'down', 'left', 'right'].forEach(dir => {
+            const zone = document.getElementById(`zone-${dir}`);
+            zone.classList.remove('drop-zone-active');
+            zone.querySelector('.swipe-indicator').style.opacity = '0.4';
+        });
+    }
+
+    function handleDragStart(e) {
+        isDragging = true;
+        startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+        startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+        card.style.transition = 'none';
+    }
+
+    function handleDragMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+        currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        const rotate = deltaX * 0.08;
+
+        card.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotate}deg)`;
+
+        // Highlight zones based on direction
+        let activeDir = null;
+        const threshold = 60;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > threshold) activeDir = 'right';
+            else if (deltaX < -threshold) activeDir = 'left';
+        } else {
+            if (deltaY > threshold) activeDir = 'down';
+            else if (deltaY < -threshold) activeDir = 'up';
+        }
+
+        ['up', 'down', 'left', 'right'].forEach(dir => {
+            const zone = document.getElementById(`zone-${dir}`);
+            const indicator = zone.querySelector('.swipe-indicator');
+            if (dir === activeDir) {
+                zone.classList.add('drop-zone-active');
+                indicator.style.opacity = '1';
+            } else {
+                zone.classList.remove('drop-zone-active');
+                indicator.style.opacity = '0.4';
+            }
+        });
+    }
+
+    function handleDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        let finalCategory = null;
+        const triggerDistance = 120;
+
+        if (Math.abs(deltaX) > triggerDistance || Math.abs(deltaY) > triggerDistance) {
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                finalCategory = deltaX > 0 ? 'right' : 'left';
+            } else {
+                finalCategory = deltaY > 0 ? 'down' : 'up';
+            }
+        }
+
+        if (finalCategory) {
+            checkResult(finalCategory);
+        } else {
+            card.style.transform = 'translate(0, 0) rotate(0deg)';
+            ['up', 'down', 'left', 'right'].forEach(dir => {
+                document.getElementById(`zone-${dir}`).classList.remove('drop-zone-active');
+                document.getElementById(`zone-${dir}`).querySelector('.swipe-indicator').style.opacity = '0.4';
+            });
+        }
+    }
+
+    function checkResult(category) {
+        const correct = wasteItems[currentItemIndex].category === category;
+        
+        // Visual feedback
+        overlay.style.opacity = '1';
+        if (correct) {
+            score += 10;
+            scoreEl.textContent = score.toString().padStart(2, '0');
+            feedbackIcon.textContent = 'check_circle';
+            feedbackIcon.className = 'material-symbols-outlined text-6xl text-waste-green';
+            card.style.transform += ' scale(0.8)';
+        } else {
+            feedbackIcon.textContent = 'cancel';
+            feedbackIcon.className = 'material-symbols-outlined text-6xl text-error';
+            card.style.transform += ' scale(0.8)';
+        }
+
+        setTimeout(() => {
+            card.style.opacity = '0';
+            setTimeout(() => {
+                currentItemIndex = (currentItemIndex + 1) % wasteItems.length;
+                updateCard();
+            }, 200);
+        }, 400);
+    }
+
+    card.addEventListener('mousedown', handleDragStart);
+    window.addEventListener('mousemove', handleDragMove);
+    window.addEventListener('mouseup', handleDragEnd);
+
+    card.addEventListener('touchstart', handleDragStart);
+    window.addEventListener('touchmove', handleDragMove, { passive: false });
+    window.addEventListener('touchend', handleDragEnd);
+
+    // Timer implementation
+    let seconds = 90;
+    const timerEl = document.getElementById('timer');
+    const timerInterval = setInterval(() => {
+        if (seconds > 0) {
+            seconds--;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            timerEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        } else {
+            clearInterval(timerInterval);
+            alert("Czas minął! Twój wynik: " + score);
+            location.reload();
+        }
+    }, 1000);
+</script>
+</body></html>

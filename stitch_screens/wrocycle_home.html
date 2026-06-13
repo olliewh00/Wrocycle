@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html lang="pl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WroCycle - Segreguj Odpady z Głową / Sort Waste Wisely</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "waste-yellow": "#FFD200",
+                    "primary-fixed-dim": "#83d99c",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-secondary-container": "#004866",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "on-tertiary-container": "#ffc3c5",
+                    "primary-container": "#006837",
+                    "tertiary-fixed": "#ffdada",
+                    "secondary": "#00658d",
+                    "secondary-fixed-dim": "#82cfff",
+                    "background": "#f8f9fa",
+                    "on-error": "#ffffff",
+                    "tertiary": "#762730",
+                    "on-tertiary-fixed-variant": "#7b2b34",
+                    "on-secondary-fixed": "#001e2d",
+                    "on-surface": "#191c1d",
+                    "on-primary-fixed-variant": "#00522a",
+                    "surface": "#f8f9fa",
+                    "primary": "#004d27",
+                    "secondary-container": "#2dbcfe",
+                    "waste-black": "#1A1A1A",
+                    "on-primary-container": "#8ee4a6",
+                    "surface-variant": "#e1e3e4",
+                    "surface-tint": "#0b6d3b",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#edeeef",
+                    "on-primary-fixed": "#00210e",
+                    "surface-bright": "#f8f9fa",
+                    "surface-container-lowest": "#ffffff",
+                    "clean-white": "#FFFFFF",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "tertiary-container": "#943e46",
+                    "tertiary-fixed-dim": "#ffb3b6",
+                    "outline-variant": "#bec9be",
+                    "on-secondary-fixed-variant": "#004c6b",
+                    "primary-fixed": "#9ef6b6",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary": "#ffffff",
+                    "waste-brown": "#8C6239",
+                    "surface-dim": "#d9dadb",
+                    "inverse-primary": "#83d99c",
+                    "surface-container-low": "#f3f4f5",
+                    "on-error-container": "#93000a",
+                    "waste-blue": "#0072BC",
+                    "surface-container-high": "#e7e8e9",
+                    "on-surface-variant": "#3f4940",
+                    "outline": "#6f7a70",
+                    "on-tertiary-fixed": "#40000c",
+                    "secondary-fixed": "#c6e7ff",
+                    "waste-green": "#009444"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "container-max": "1200px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "caption": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .hover-lift {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .hover-lift:hover {
+        transform: translateY(-8px);
+      }
+      .lang-separator {
+        opacity: 0.4;
+        margin: 0 0.5rem;
+      }
+      .scanner-pulse {
+        animation: scan 3s infinite;
+      }
+      @keyframes scan {
+        0%, 100% { top: 0; }
+        50% { top: 100%; }
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface/90 dark:bg-surface-dim/90 docked full-width top-0 sticky backdrop-blur-md shadow-sm z-50">
+<div class="max-w-[1200px] mx-auto flex justify-between items-center px-margin-desktop h-20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="recycling">recycling</span>
+<span class="text-headline-md font-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">EkoSzkoła</span>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary font-bold pb-1" href="#">Główna / <span class="font-normal opacity-80">Home</span></a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">Zasady / <span class="opacity-80">Rules</span></a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">Gra / <span class="opacity-80">Game</span></a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">O projekcie / <span class="opacity-80">About</span></a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="hidden sm:flex items-center font-label-md text-label-md text-on-surface-variant">
+<button class="hover:text-primary font-bold">PL</button>
+<span class="lang-separator">|</span>
+<button class="hover:text-primary">EN</button>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2 rounded-full font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all whitespace-nowrap">
+                Zaloguj się / <span class="font-normal opacity-80">Login</span>
+</button>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section with Integrated Scanner -->
+<section class="relative overflow-hidden py-16 md:py-24">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-[1200px] mx-auto px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="text-left">
+<div class="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-8">
+<span class="material-symbols-outlined text-[18px]" data-icon="camera_enhance" style="font-variation-settings: 'FILL' 1;">camera_enhance</span>
+<span class="font-label-md text-label-md">Eko-Skaner AI / <span class="font-normal">AI Eco-Scanner</span></span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-6 leading-tight">
+                        Nie wiesz gdzie wyrzucić? <span class="text-primary">Zeskanuj!</span> / <br/>Not sure where to throw? <span class="text-primary">Scan it!</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12 max-w-xl">
+                        Użyj aparatu, aby natychmiast rozpoznać rodzaj odpadu i przypisać go do właściwego kosza. / <span class="italic">Use your camera to instantly recognize the waste type and assign it to the correct bin.</span>
+</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-headline-md text-headline-md flex flex-col items-center justify-center hover:shadow-lg transition-all group min-w-[200px]">
+<span class="flex items-center gap-2">
+                                Uruchom Skaner
+                                <span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span>
+</span>
+<span class="text-caption font-normal opacity-80">Launch Scanner</span>
+</button>
+<button class="bg-clean-white border-2 border-outline-variant text-on-surface px-8 py-4 rounded-full font-headline-md text-headline-md hover:bg-surface-container-low transition-all flex flex-col items-center justify-center">
+<span>Prześlij Zdjęcie</span>
+<span class="text-caption font-normal text-on-surface-variant">Upload Photo</span>
+</button>
+</div>
+</div>
+<!-- Scanner UI Mockup -->
+<div class="relative mx-auto w-full max-w-md lg:max-w-none">
+<div class="relative bg-white p-4 rounded-[2.5rem] shadow-2xl border-4 border-surface-container-highest overflow-hidden aspect-[4/5] lg:aspect-square flex items-center justify-center">
+<img alt="Waste Scanner Preview" class="absolute inset-0 w-full h-full object-cover opacity-80 grayscale-[0.2]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsenUWgItZzo1tnWse6ysCSbvNp095BHnhfnY5myFTF4pcN02V7-m3WoYLuEIkO3thqDJDf8YevaSwvK6s59HgFii-ktU1OG3tdip6jVJZxNT_cYbMxhs-GAWzYvJMOgmr2-HscZBQDyQ9VPu_NsdLKJdBTMLEELc7mk_zK2aIl0EWugMZHfkT4bTDH6tRz4JZQJuDhQOcncAIGC28gj1P75i-L9k2GqVF9xDoNeSJkUxcV1Mq9TXbw5s3pmRUvu1D7v3gUcl7hO4D"/>
+<!-- Scanning Line -->
+<div class="scanner-pulse absolute left-0 right-0 h-1 bg-primary/40 shadow-[0_0_15px_rgba(0,77,39,0.5)] z-20"></div>
+<!-- Viewfinder Corners -->
+<div class="absolute inset-8 border-2 border-white/40 rounded-3xl pointer-events-none"></div>
+<div class="relative z-10 glass-card p-6 rounded-2xl text-center max-w-[80%]">
+<div class="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</div>
+<h4 class="font-headline-md text-on-surface mb-1">Analizowanie...</h4>
+<p class="text-caption text-on-surface-variant">Analyzing... 85%</p>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute -top-6 -right-6 w-24 h-24 bg-waste-yellow/20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Waste Categories -->
+<section class="py-20 bg-surface">
+<div class="max-w-[1200px] mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div class="max-w-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Pięć Filarów Segregacji / <span class="font-normal text-on-surface-variant">Five Pillars of Sorting</span></h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Poznaj zasady sortowania odpadów w Polsce. / <span class="italic">Learn the rules of waste sorting in Poland. Every color matters.</span></p>
+</div>
+<a class="text-primary font-label-md flex items-center gap-1 hover:underline" href="#">
+                    Wszystkie zasady / <span class="font-normal">All rules</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-6 gap-gutter">
+<!-- Metale i Tworzywa -->
+<div class="md:col-span-3 bg-white rounded-[2rem] p-8 border-t-8 border-waste-yellow shadow-sm hover-lift relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-waste-yellow/10 rounded-full blur-2xl group-hover:bg-waste-yellow/20 transition-colors"></div>
+<span class="material-symbols-outlined text-[48px] text-waste-yellow mb-6 block" data-icon="recycling">recycling</span>
+<h3 class="font-headline-md text-headline-md mb-1">Metale i Tworzywa</h3>
+<h4 class="text-label-md text-on-surface-variant mb-3 font-normal">Metals and Plastics</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Puszki, butelki PET, kartony po sokach. / <span class="italic">Cans, PET bottles, juice cartons.</span></p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Butelki / <span class="font-normal opacity-70">Bottles</span></span>
+<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Puszki / <span class="font-normal opacity-70">Cans</span></span>
+<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Tetrapak</span>
+</div>
+</div>
+<!-- Papier -->
+<div class="md:col-span-3 bg-white rounded-[2rem] p-8 border-t-8 border-waste-blue shadow-sm hover-lift group">
+<span class="material-symbols-outlined text-[48px] text-waste-blue mb-6 block" data-icon="description">description</span>
+<h3 class="font-headline-md text-headline-md mb-1">Papier</h3>
+<h4 class="text-label-md text-on-surface-variant mb-3 font-normal">Paper</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Gazety, zeszyty, kartony. / <span class="italic">Newspapers, notebooks, cardboard boxes.</span></p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Książki / <span class="font-normal opacity-70">Books</span></span>
+<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Karton / <span class="font-normal opacity-70">Cardboard</span></span>
+<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Ulotki / <span class="font-normal opacity-70">Flyers</span></span>
+</div>
+</div>
+<!-- Szkło -->
+<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-green shadow-sm hover-lift group">
+<span class="material-symbols-outlined text-[48px] text-waste-green mb-6 block" data-icon="wine_bar">wine_bar</span>
+<h4 class="font-headline-md text-headline-md mb-1">Szkło</h4>
+<p class="text-label-md text-on-surface-variant mb-2 font-normal">Glass</p>
+<p class="font-body-md text-body-md text-on-surface-variant italic">Jars and glass bottles.</p>
+</div>
+<!-- Bio -->
+<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-brown shadow-sm hover-lift group">
+<span class="material-symbols-outlined text-[48px] text-waste-brown mb-6 block" data-icon="compost">compost</span>
+<h4 class="font-headline-md text-headline-md mb-1">Bio</h4>
+<p class="text-label-md text-on-surface-variant mb-2 font-normal">Bio-waste</p>
+<p class="font-body-md text-body-md text-on-surface-variant italic">Peels, food scraps, coffee grounds.</p>
+</div>
+<!-- Zmieszane -->
+<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-black shadow-sm hover-lift group">
+<span class="material-symbols-outlined text-[48px] text-waste-black mb-6 block" data-icon="delete">delete</span>
+<h4 class="font-headline-md text-headline-md mb-1">Zmieszane</h4>
+<p class="text-label-md text-on-surface-variant mb-2 font-normal">Mixed</p>
+<p class="font-body-md text-body-md text-on-surface-variant italic">Hygiene items, meat scraps, ceramics.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Game Section -->
+<section class="py-24">
+<div class="max-w-[1200px] mx-auto px-margin-desktop">
+<div class="bg-primary-container rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-center relative">
+<div class="p-12 md:p-20 md:w-3/5 z-10">
+<h2 class="font-display-lg text-display-lg text-white mb-4">Graj i Ucz się! / <span class="font-normal opacity-90">Play &amp; Learn!</span></h2>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-10">
+                        Sprawdź swoją wiedzę w naszej grze edukacyjnej. / <span class="italic opacity-90">Test your knowledge in our educational game. Can you sort everything correctly?</span>
+</p>
+<button class="bg-clean-white text-primary px-10 py-5 rounded-full font-headline-md text-headline-md hover:bg-on-primary-container transition-all flex flex-col items-center gap-1">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="sports_esports" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+                            Uruchom Grę
+                        </span>
+<span class="text-caption font-normal">Launch Game</span>
+</button>
+</div>
+<div class="md:w-2/5 h-64 md:h-auto self-stretch relative min-h-[300px]">
+<img alt="Game Interface Preview" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcJKoZXEsVXB171bQlsXVYKb3v6ih60XpiwefhFBjogW6BI2hUetXbhuVMTIn2T4mD9kboCuBMmh0XBwbweiPNGrZ8DLmTjyx0pWTCHEsUwqlU2ompKbhvx4v5X1sTON4qKFLQCoZBBnD7qmxiUTDXsxj0rIVn62im8M3gzac6DkaWNN2TYaEErICp5r1dL4yfP4_Rt8ctY0kDiipBGea_SuapmNSYeVPChXGp6H1SE0ilu7iI6ieOpznHm2Y9ikcRG09s6X11dec_"/>
+<div class="absolute inset-0 bg-primary-container/20"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter -->
+<section class="pb-24">
+<div class="max-w-[1200px] mx-auto px-margin-desktop text-center">
+<div class="bg-surface-container-low rounded-[2rem] p-12 border border-outline-variant/30">
+<h3 class="font-headline-lg text-headline-lg mb-4">Chcesz wiedzieć więcej? / <span class="font-normal text-on-surface-variant">Want to know more?</span></h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-2xl mx-auto">Zapisz się do naszego eko-poradnika. / <span class="italic">Subscribe to our eco-guide and receive weekly tips for a zero-waste lifestyle.</span></p>
+<form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+<input class="flex-grow rounded-full px-6 py-4 border-outline focus:ring-primary focus:border-primary bg-white" placeholder="Twój adres e-mail / Email address" type="email"/>
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md flex flex-col items-center">
+<span>Zapisz się</span>
+<span class="text-[10px] font-normal uppercase tracking-wider opacity-80">Subscribe</span>
+</button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface full-width mt-auto">
+<div class="max-w-[1200px] mx-auto py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
+<div class="flex flex-col gap-4 items-center md:items-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="eco">eco</span>
+<span class="font-headline-md text-primary dark:text-primary-fixed-dim">EkoSzkoła</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs text-center md:text-left">
+                © 2024 EkoSzkoła Polska. Razem dla czystej planety. / <br/><span class="italic text-caption">Together for a clean planet.</span>
+</p>
+</div>
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Polityka / <span class="font-normal opacity-70">Privacy</span></a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Kontakt / <span class="font-normal opacity-70">Contact</span></a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Poradnik / <span class="font-normal opacity-70">Guide</span></a>
+</div>
+</div>
+</footer>
+<script>
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 20) {
+            header.classList.add('shadow-md');
+            header.classList.remove('shadow-sm');
+        } else {
+            header.classList.add('shadow-sm');
+            header.classList.remove('shadow-md');
+        }
+    });
+</script>
+</body></html>
