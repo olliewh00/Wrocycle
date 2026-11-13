@@ -563,7 +563,7 @@ with tab_game:
         html_content = html_content.replace("</head>", f"{hide_style}</head>")
         
         # Embed the HTML/JS Component
-        st.components.v1.html(html_content, height=800, scrolling=True)
+        st.components.v1.html(html_content, height=640, scrolling=False)
     else:
         st.error("❌ Gra nie mogła zostać załadowana. Brak pliku wrocycle_game.html / Game file not found.")
 
