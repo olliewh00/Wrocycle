@@ -80,40 +80,97 @@ st.markdown("""
     }
     
     /* Style Streamlit Tabs */
-    div[data-testid="stTabBar"] {
+    div[data-testid="stTabBar"],
+    div[data-testid="stTabs"],
+    [data-baseweb="tab-list"] {
         background-color: transparent !important;
-        border-bottom: 1px solid #e1e3e4 !important;
+        border-bottom: 1.5px solid #e1e3e4 !important;
         padding: 0 !important;
-        margin-bottom: 28px !important;
+        margin-bottom: 24px !important;
         display: flex !important;
         justify-content: center !important;
     }
     
-    div[data-testid="stTabBar"] > div {
+    div[data-testid="stTabBar"] > div,
+    div[data-testid="stTabs"] > div,
+    [data-baseweb="tab-list"] > div {
         justify-content: center !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
     
-    button[data-baseweb="tab"] {
+    /* Unselected Tabs: High-contrast readable dark text */
+    button[data-baseweb="tab"],
+    div[data-testid="stTabs"] button,
+    div[data-testid="stTabBar"] button,
+    [data-baseweb="tab-list"] button {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 13px !important;
         font-weight: 700 !important;
-        color: #3f4940 !important;
-        padding: 14px 20px !important;
-        transition: all 0.25s ease !important;
+        color: #2e3132 !important;
+        padding: 12px 18px !important;
+        transition: all 0.2s ease !important;
         border-bottom: 2px solid transparent !important;
         background-color: transparent !important;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.2px;
     }
     
-    button[data-baseweb="tab"]:hover {
-        color: #004d27 !important;
+    /* Ensure all inner text elements (p, span, div) in unselected tabs are dark & readable */
+    button[data-baseweb="tab"] *,
+    button[data-baseweb="tab"] p,
+    button[data-baseweb="tab"] div,
+    button[data-baseweb="tab"] span,
+    div[data-testid="stTabs"] button *,
+    div[data-testid="stTabs"] button p,
+    div[data-testid="stTabs"] button div,
+    div[data-testid="stTabs"] button span,
+    div[data-testid="stTabBar"] button *,
+    div[data-testid="stTabBar"] button p,
+    [data-baseweb="tab-list"] button *,
+    [data-baseweb="tab-list"] button p {
+        color: #2e3132 !important;
+        opacity: 0.82 !important;
+        font-weight: 700 !important;
     }
     
-    button[data-baseweb="tab"][aria-selected="true"] {
+    /* Tab Hover State */
+    button[data-baseweb="tab"]:hover,
+    button[data-baseweb="tab"]:hover *,
+    button[data-baseweb="tab"]:hover p,
+    div[data-testid="stTabs"] button:hover,
+    div[data-testid="stTabs"] button:hover * {
         color: #004d27 !important;
-        border-bottom: 2px solid #004d27 !important;
+        opacity: 1 !important;
+    }
+    
+    /* Selected Active Tab */
+    button[data-baseweb="tab"][aria-selected="true"],
+    div[data-testid="stTabs"] button[aria-selected="true"],
+    div[data-testid="stTabBar"] button[aria-selected="true"],
+    [data-baseweb="tab-list"] button[aria-selected="true"] {
+        color: #004d27 !important;
+        border-bottom: 2.5px solid #004d27 !important;
+        opacity: 1 !important;
+    }
+    
+    button[data-baseweb="tab"][aria-selected="true"] *,
+    button[data-baseweb="tab"][aria-selected="true"] p,
+    button[data-baseweb="tab"][aria-selected="true"] div,
+    button[data-baseweb="tab"][aria-selected="true"] span,
+    div[data-testid="stTabs"] button[aria-selected="true"] *,
+    div[data-testid="stTabs"] button[aria-selected="true"] p,
+    div[data-testid="stTabBar"] button[aria-selected="true"] *,
+    div[data-testid="stTabBar"] button[aria-selected="true"] p,
+    [data-baseweb="tab-list"] button[aria-selected="true"] *,
+    [data-baseweb="tab-list"] button[aria-selected="true"] p {
+        color: #004d27 !important;
+        opacity: 1 !important;
+        font-weight: 800 !important;
+    }
+    
+    /* Active indicator bar */
+    [data-baseweb="tab-highlight"],
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+        background-color: #004d27 !important;
     }
     
     /* Style Streamlit Buttons */
@@ -123,11 +180,16 @@ st.markdown("""
         border-radius: 9999px !important;
         padding: 10px 24px !important;
         font-weight: 600 !important;
-        color: #3f4940 !important;
+        color: #191c1d !important;
         transition: all 0.2s ease !important;
         box-shadow: 0 4px 10px rgba(0,0,0,0.02) !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 0.85rem !important;
+    }
+
+    button[kind="secondary"] *,
+    button[kind="secondary"] p {
+        color: #191c1d !important;
     }
     
     button[kind="secondary"]:hover {
