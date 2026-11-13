@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="640" height="640">
+  <rect width="640" height="640" fill="#f3efe8"/>
+  <ellipse cx="320" cy="500" rx="230" ry="26" fill="#000" opacity=".10"/>
+  <!-- main body of the mug (chipped rim) -->
+  <path d="M170 210 L255 210 L285 238 L330 205 L372 232 L410 210 L450 210 L440 470 Q438 505 400 505 L220 505 Q182 505 180 470 Z" fill="#e9f0f5" stroke="#3a5a78" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M170 210 L450 210" stroke="none"/>
+  <rect x="182" y="300" width="256" height="44" fill="#3a8fb7" opacity=".85"/>
+  <rect x="182" y="360" width="256" height="14" fill="#3a8fb7" opacity=".5"/>
+  <!-- crack -->
+  <path d="M300 240 L318 300 L296 350 L322 410 L304 470" fill="none" stroke="#3a5a78" stroke-width="5" stroke-linejoin="round"/>
+  <!-- handle (broken off) -->
+  <path d="M440 260 Q520 262 520 340 Q520 405 452 410" fill="none" stroke="#3a5a78" stroke-width="30" stroke-linecap="round"/>
+  <path d="M440 260 Q520 262 520 340 Q520 405 452 410" fill="none" stroke="#e9f0f5" stroke-width="16" stroke-linecap="round"/>
+  <!-- shards -->
+  <path d="M95 520 L165 492 L186 540 L118 562 Z" fill="#e9f0f5" stroke="#3a5a78" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M110 530 L160 512 L170 532 L124 548Z" fill="#3a8fb7" opacity=".85"/>
+  <path d="M460 535 L530 515 L552 560 L485 578 Z" fill="#e9f0f5" stroke="#3a5a78" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M335 535 L372 526 L365 556 Z" fill="#e9f0f5" stroke="#3a5a78" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M255 545 L290 538 L280 566 L252 560Z" fill="#e9f0f5" stroke="#3a5a78" stroke-width="5" stroke-linejoin="round"/>
+</svg>
