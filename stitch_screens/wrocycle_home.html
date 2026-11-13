@@ -1,352 +1,430 @@
 <!DOCTYPE html>
-
-<html lang="pl"><head>
+<html lang="pl">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0" name="viewport"/>
 <title>WroCycle - Segreguj Odpady z Głową / Sort Waste Wisely</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "waste-yellow": "#FFD200",
-                    "primary-fixed-dim": "#83d99c",
-                    "surface-container-highest": "#e1e3e4",
-                    "on-secondary-container": "#004866",
-                    "on-primary": "#ffffff",
-                    "inverse-surface": "#2e3132",
-                    "on-tertiary-container": "#ffc3c5",
-                    "primary-container": "#006837",
-                    "tertiary-fixed": "#ffdada",
-                    "secondary": "#00658d",
-                    "secondary-fixed-dim": "#82cfff",
-                    "background": "#f8f9fa",
-                    "on-error": "#ffffff",
-                    "tertiary": "#762730",
-                    "on-tertiary-fixed-variant": "#7b2b34",
-                    "on-secondary-fixed": "#001e2d",
-                    "on-surface": "#191c1d",
-                    "on-primary-fixed-variant": "#00522a",
-                    "surface": "#f8f9fa",
-                    "primary": "#004d27",
-                    "secondary-container": "#2dbcfe",
-                    "waste-black": "#1A1A1A",
-                    "on-primary-container": "#8ee4a6",
-                    "surface-variant": "#e1e3e4",
-                    "surface-tint": "#0b6d3b",
-                    "error-container": "#ffdad6",
-                    "surface-container": "#edeeef",
-                    "on-primary-fixed": "#00210e",
-                    "surface-bright": "#f8f9fa",
-                    "surface-container-lowest": "#ffffff",
-                    "clean-white": "#FFFFFF",
-                    "error": "#ba1a1a",
-                    "on-secondary": "#ffffff",
-                    "on-background": "#191c1d",
-                    "tertiary-container": "#943e46",
-                    "tertiary-fixed-dim": "#ffb3b6",
-                    "outline-variant": "#bec9be",
-                    "on-secondary-fixed-variant": "#004c6b",
-                    "primary-fixed": "#9ef6b6",
-                    "inverse-on-surface": "#f0f1f2",
-                    "on-tertiary": "#ffffff",
-                    "waste-brown": "#8C6239",
-                    "surface-dim": "#d9dadb",
-                    "inverse-primary": "#83d99c",
-                    "surface-container-low": "#f3f4f5",
-                    "on-error-container": "#93000a",
-                    "waste-blue": "#0072BC",
-                    "surface-container-high": "#e7e8e9",
-                    "on-surface-variant": "#3f4940",
-                    "outline": "#6f7a70",
-                    "on-tertiary-fixed": "#40000c",
-                    "secondary-fixed": "#c6e7ff",
-                    "waste-green": "#009444"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "spacing": {
-                    "margin-mobile": "16px",
-                    "gutter": "24px",
-                    "margin-desktop": "64px",
-                    "container-max": "1200px",
-                    "unit": "8px"
-            },
-            "fontFamily": {
-                    "headline-lg": ["Plus Jakarta Sans"],
-                    "body-lg": ["Plus Jakarta Sans"],
-                    "label-md": ["Plus Jakarta Sans"],
-                    "caption": ["Plus Jakarta Sans"],
-                    "headline-md": ["Plus Jakarta Sans"],
-                    "body-md": ["Plus Jakarta Sans"],
-                    "headline-lg-mobile": ["Plus Jakarta Sans"],
-                    "display-lg": ["Plus Jakarta Sans"]
-            },
-            "fontSize": {
-                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
-                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
-                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
-                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
-            }
-          },
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "waste-yellow": "#FFD200",
+          "primary-fixed-dim": "#83d99c",
+          "surface-container-highest": "#e1e3e4",
+          "on-secondary-container": "#004866",
+          "on-primary": "#ffffff",
+          "inverse-surface": "#2e3132",
+          "on-tertiary-container": "#ffc3c5",
+          "primary-container": "#006837",
+          "tertiary-fixed": "#ffdada",
+          "secondary": "#00658d",
+          "secondary-fixed-dim": "#82cfff",
+          "background": "#f8f9fa",
+          "on-error": "#ffffff",
+          "tertiary": "#762730",
+          "on-secondary-fixed": "#001e2d",
+          "on-surface": "#191c1d",
+          "surface": "#f8f9fa",
+          "primary": "#004d27",
+          "secondary-container": "#2dbcfe",
+          "waste-black": "#1A1A1A",
+          "on-primary-container": "#8ee4a6",
+          "surface-variant": "#e1e3e4",
+          "surface-tint": "#0b6d3b",
+          "error-container": "#ffdad6",
+          "surface-container": "#edeeef",
+          "surface-bright": "#f8f9fa",
+          "surface-container-lowest": "#ffffff",
+          "clean-white": "#FFFFFF",
+          "error": "#ba1a1a",
+          "on-secondary": "#ffffff",
+          "on-background": "#191c1d",
+          "tertiary-container": "#943e46",
+          "outline-variant": "#bec9be",
+          "primary-fixed": "#9ef6b6",
+          "inverse-on-surface": "#f0f1f2",
+          "on-tertiary": "#ffffff",
+          "waste-brown": "#8C6239",
+          "surface-dim": "#d9dadb",
+          "inverse-primary": "#83d99c",
+          "surface-container-low": "#f3f4f5",
+          "on-error-container": "#93000a",
+          "waste-blue": "#0072BC",
+          "surface-container-high": "#e7e8e9",
+          "on-surface-variant": "#3f4940",
+          "outline": "#6f7a70",
+          "secondary-fixed": "#c6e7ff",
+          "waste-green": "#009444"
         },
-      }
-    </script>
-<style>
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-      }
-      .hover-lift {
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-      .hover-lift:hover {
-        transform: translateY(-8px);
-      }
-      .lang-separator {
-        opacity: 0.4;
-        margin: 0 0.5rem;
-      }
-      .scanner-pulse {
-        animation: scan 3s infinite;
-      }
-      @keyframes scan {
-        0%, 100% { top: 0; }
-        50% { top: 100%; }
-      }
-    </style>
-</head>
-<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
-<!-- TopNavBar -->
-<header class="bg-surface/90 dark:bg-surface-dim/90 docked full-width top-0 sticky backdrop-blur-md shadow-sm z-50">
-<div class="max-w-[1200px] mx-auto flex justify-between items-center px-margin-desktop h-20">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-3xl" data-icon="recycling">recycling</span>
-<span class="text-headline-md font-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">EkoSzkoła</span>
-</div>
-<nav class="hidden lg:flex items-center gap-6">
-<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary font-bold pb-1" href="#">Główna / <span class="font-normal opacity-80">Home</span></a>
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">Zasady / <span class="opacity-80">Rules</span></a>
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">Gra / <span class="opacity-80">Game</span></a>
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200" href="#">O projekcie / <span class="opacity-80">About</span></a>
-</nav>
-<div class="flex items-center gap-6">
-<div class="hidden sm:flex items-center font-label-md text-label-md text-on-surface-variant">
-<button class="hover:text-primary font-bold">PL</button>
-<span class="lang-separator">|</span>
-<button class="hover:text-primary">EN</button>
-</div>
-<button class="bg-primary text-on-primary px-5 py-2 rounded-full font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all whitespace-nowrap">
-                Zaloguj się / <span class="font-normal opacity-80">Login</span>
-</button>
-</div>
-</div>
-</header>
-<main>
-<!-- Hero Section with Integrated Scanner -->
-<section class="relative overflow-hidden py-16 md:py-24">
-<div class="absolute inset-0 z-0">
-<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
-</div>
-<div class="relative z-10 max-w-[1200px] mx-auto px-margin-desktop">
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-<div class="text-left">
-<div class="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-8">
-<span class="material-symbols-outlined text-[18px]" data-icon="camera_enhance" style="font-variation-settings: 'FILL' 1;">camera_enhance</span>
-<span class="font-label-md text-label-md">Eko-Skaner AI / <span class="font-normal">AI Eco-Scanner</span></span>
-</div>
-<h1 class="font-display-lg text-display-lg text-on-surface mb-6 leading-tight">
-                        Nie wiesz gdzie wyrzucić? <span class="text-primary">Zeskanuj!</span> / <br/>Not sure where to throw? <span class="text-primary">Scan it!</span>
-</h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-12 max-w-xl">
-                        Użyj aparatu, aby natychmiast rozpoznać rodzaj odpadu i przypisać go do właściwego kosza. / <span class="italic">Use your camera to instantly recognize the waste type and assign it to the correct bin.</span>
-</p>
-<div class="flex flex-col sm:flex-row gap-4">
-<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-headline-md text-headline-md flex flex-col items-center justify-center hover:shadow-lg transition-all group min-w-[200px]">
-<span class="flex items-center gap-2">
-                                Uruchom Skaner
-                                <span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span>
-</span>
-<span class="text-caption font-normal opacity-80">Launch Scanner</span>
-</button>
-<button class="bg-clean-white border-2 border-outline-variant text-on-surface px-8 py-4 rounded-full font-headline-md text-headline-md hover:bg-surface-container-low transition-all flex flex-col items-center justify-center">
-<span>Prześlij Zdjęcie</span>
-<span class="text-caption font-normal text-on-surface-variant">Upload Photo</span>
-</button>
-</div>
-</div>
-<!-- Scanner UI Mockup -->
-<div class="relative mx-auto w-full max-w-md lg:max-w-none">
-<div class="relative bg-white p-4 rounded-[2.5rem] shadow-2xl border-4 border-surface-container-highest overflow-hidden aspect-[4/5] lg:aspect-square flex items-center justify-center">
-<img alt="Waste Scanner Preview" class="absolute inset-0 w-full h-full object-cover opacity-80 grayscale-[0.2]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsenUWgItZzo1tnWse6ysCSbvNp095BHnhfnY5myFTF4pcN02V7-m3WoYLuEIkO3thqDJDf8YevaSwvK6s59HgFii-ktU1OG3tdip6jVJZxNT_cYbMxhs-GAWzYvJMOgmr2-HscZBQDyQ9VPu_NsdLKJdBTMLEELc7mk_zK2aIl0EWugMZHfkT4bTDH6tRz4JZQJuDhQOcncAIGC28gj1P75i-L9k2GqVF9xDoNeSJkUxcV1Mq9TXbw5s3pmRUvu1D7v3gUcl7hO4D"/>
-<!-- Scanning Line -->
-<div class="scanner-pulse absolute left-0 right-0 h-1 bg-primary/40 shadow-[0_0_15px_rgba(0,77,39,0.5)] z-20"></div>
-<!-- Viewfinder Corners -->
-<div class="absolute inset-8 border-2 border-white/40 rounded-3xl pointer-events-none"></div>
-<div class="relative z-10 glass-card p-6 rounded-2xl text-center max-w-[80%]">
-<div class="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto mb-3">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</div>
-<h4 class="font-headline-md text-on-surface mb-1">Analizowanie...</h4>
-<p class="text-caption text-on-surface-variant">Analyzing... 85%</p>
-</div>
-</div>
-<!-- Decorative Elements -->
-<div class="absolute -top-6 -right-6 w-24 h-24 bg-waste-yellow/20 rounded-full blur-3xl"></div>
-<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-</div>
-</div>
-</div>
-</section>
-<!-- Waste Categories -->
-<section class="py-20 bg-surface">
-<div class="max-w-[1200px] mx-auto px-margin-desktop">
-<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-<div class="max-w-xl">
-<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Pięć Filarów Segregacji / <span class="font-normal text-on-surface-variant">Five Pillars of Sorting</span></h2>
-<p class="font-body-md text-body-md text-on-surface-variant">Poznaj zasady sortowania odpadów w Polsce. / <span class="italic">Learn the rules of waste sorting in Poland. Every color matters.</span></p>
-</div>
-<a class="text-primary font-label-md flex items-center gap-1 hover:underline" href="#">
-                    Wszystkie zasady / <span class="font-normal">All rules</span>
-<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
-</a>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-6 gap-gutter">
-<!-- Metale i Tworzywa -->
-<div class="md:col-span-3 bg-white rounded-[2rem] p-8 border-t-8 border-waste-yellow shadow-sm hover-lift relative overflow-hidden group">
-<div class="absolute -right-4 -top-4 w-32 h-32 bg-waste-yellow/10 rounded-full blur-2xl group-hover:bg-waste-yellow/20 transition-colors"></div>
-<span class="material-symbols-outlined text-[48px] text-waste-yellow mb-6 block" data-icon="recycling">recycling</span>
-<h3 class="font-headline-md text-headline-md mb-1">Metale i Tworzywa</h3>
-<h4 class="text-label-md text-on-surface-variant mb-3 font-normal">Metals and Plastics</h4>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Puszki, butelki PET, kartony po sokach. / <span class="italic">Cans, PET bottles, juice cartons.</span></p>
-<div class="flex flex-wrap gap-2">
-<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Butelki / <span class="font-normal opacity-70">Bottles</span></span>
-<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Puszki / <span class="font-normal opacity-70">Cans</span></span>
-<span class="bg-waste-yellow/10 text-on-surface px-3 py-1 rounded-full text-caption">Tetrapak</span>
-</div>
-</div>
-<!-- Papier -->
-<div class="md:col-span-3 bg-white rounded-[2rem] p-8 border-t-8 border-waste-blue shadow-sm hover-lift group">
-<span class="material-symbols-outlined text-[48px] text-waste-blue mb-6 block" data-icon="description">description</span>
-<h3 class="font-headline-md text-headline-md mb-1">Papier</h3>
-<h4 class="text-label-md text-on-surface-variant mb-3 font-normal">Paper</h4>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Gazety, zeszyty, kartony. / <span class="italic">Newspapers, notebooks, cardboard boxes.</span></p>
-<div class="flex flex-wrap gap-2">
-<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Książki / <span class="font-normal opacity-70">Books</span></span>
-<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Karton / <span class="font-normal opacity-70">Cardboard</span></span>
-<span class="bg-waste-blue/10 text-on-surface px-3 py-1 rounded-full text-caption">Ulotki / <span class="font-normal opacity-70">Flyers</span></span>
-</div>
-</div>
-<!-- Szkło -->
-<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-green shadow-sm hover-lift group">
-<span class="material-symbols-outlined text-[48px] text-waste-green mb-6 block" data-icon="wine_bar">wine_bar</span>
-<h4 class="font-headline-md text-headline-md mb-1">Szkło</h4>
-<p class="text-label-md text-on-surface-variant mb-2 font-normal">Glass</p>
-<p class="font-body-md text-body-md text-on-surface-variant italic">Jars and glass bottles.</p>
-</div>
-<!-- Bio -->
-<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-brown shadow-sm hover-lift group">
-<span class="material-symbols-outlined text-[48px] text-waste-brown mb-6 block" data-icon="compost">compost</span>
-<h4 class="font-headline-md text-headline-md mb-1">Bio</h4>
-<p class="text-label-md text-on-surface-variant mb-2 font-normal">Bio-waste</p>
-<p class="font-body-md text-body-md text-on-surface-variant italic">Peels, food scraps, coffee grounds.</p>
-</div>
-<!-- Zmieszane -->
-<div class="md:col-span-2 bg-white rounded-[2rem] p-8 border-t-8 border-waste-black shadow-sm hover-lift group">
-<span class="material-symbols-outlined text-[48px] text-waste-black mb-6 block" data-icon="delete">delete</span>
-<h4 class="font-headline-md text-headline-md mb-1">Zmieszane</h4>
-<p class="text-label-md text-on-surface-variant mb-2 font-normal">Mixed</p>
-<p class="font-body-md text-body-md text-on-surface-variant italic">Hygiene items, meat scraps, ceramics.</p>
-</div>
-</div>
-</div>
-</section>
-<!-- CTA Game Section -->
-<section class="py-24">
-<div class="max-w-[1200px] mx-auto px-margin-desktop">
-<div class="bg-primary-container rounded-[3rem] overflow-hidden flex flex-col md:flex-row items-center relative">
-<div class="p-12 md:p-20 md:w-3/5 z-10">
-<h2 class="font-display-lg text-display-lg text-white mb-4">Graj i Ucz się! / <span class="font-normal opacity-90">Play &amp; Learn!</span></h2>
-<p class="font-body-lg text-body-lg text-on-primary-container mb-10">
-                        Sprawdź swoją wiedzę w naszej grze edukacyjnej. / <span class="italic opacity-90">Test your knowledge in our educational game. Can you sort everything correctly?</span>
-</p>
-<button class="bg-clean-white text-primary px-10 py-5 rounded-full font-headline-md text-headline-md hover:bg-on-primary-container transition-all flex flex-col items-center gap-1">
-<span class="flex items-center gap-3">
-<span class="material-symbols-outlined" data-icon="sports_esports" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
-                            Uruchom Grę
-                        </span>
-<span class="text-caption font-normal">Launch Game</span>
-</button>
-</div>
-<div class="md:w-2/5 h-64 md:h-auto self-stretch relative min-h-[300px]">
-<img alt="Game Interface Preview" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcJKoZXEsVXB171bQlsXVYKb3v6ih60XpiwefhFBjogW6BI2hUetXbhuVMTIn2T4mD9kboCuBMmh0XBwbweiPNGrZ8DLmTjyx0pWTCHEsUwqlU2ompKbhvx4v5X1sTON4qKFLQCoZBBnD7qmxiUTDXsxj0rIVn62im8M3gzac6DkaWNN2TYaEErICp5r1dL4yfP4_Rt8ctY0kDiipBGea_SuapmNSYeVPChXGp6H1SE0ilu7iI6ieOpznHm2Y9ikcRG09s6X11dec_"/>
-<div class="absolute inset-0 bg-primary-container/20"></div>
-</div>
-</div>
-</div>
-</section>
-<!-- Newsletter -->
-<section class="pb-24">
-<div class="max-w-[1200px] mx-auto px-margin-desktop text-center">
-<div class="bg-surface-container-low rounded-[2rem] p-12 border border-outline-variant/30">
-<h3 class="font-headline-lg text-headline-lg mb-4">Chcesz wiedzieć więcej? / <span class="font-normal text-on-surface-variant">Want to know more?</span></h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-2xl mx-auto">Zapisz się do naszego eko-poradnika. / <span class="italic">Subscribe to our eco-guide and receive weekly tips for a zero-waste lifestyle.</span></p>
-<form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-<input class="flex-grow rounded-full px-6 py-4 border-outline focus:ring-primary focus:border-primary bg-white" placeholder="Twój adres e-mail / Email address" type="email"/>
-<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md flex flex-col items-center">
-<span>Zapisz się</span>
-<span class="text-[10px] font-normal uppercase tracking-wider opacity-80">Subscribe</span>
-</button>
-</form>
-</div>
-</div>
-</section>
-</main>
-<!-- Footer -->
-<footer class="bg-surface-container-lowest dark:bg-inverse-surface full-width mt-auto">
-<div class="max-w-[1200px] mx-auto py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
-<div class="flex flex-col gap-4 items-center md:items-start">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-2xl" data-icon="eco">eco</span>
-<span class="font-headline-md text-primary dark:text-primary-fixed-dim">EkoSzkoła</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant max-w-xs text-center md:text-left">
-                © 2024 EkoSzkoła Polska. Razem dla czystej planety. / <br/><span class="italic text-caption">Together for a clean planet.</span>
-</p>
-</div>
-<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Polityka / <span class="font-normal opacity-70">Privacy</span></a>
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Kontakt / <span class="font-normal opacity-70">Contact</span></a>
-<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors hover:underline decoration-2 underline-offset-4" href="#">Poradnik / <span class="font-normal opacity-70">Guide</span></a>
-</div>
-</div>
-</footer>
-<script>
-    window.addEventListener('scroll', () => {
-        const header = document.querySelector('header');
-        if (window.scrollY > 20) {
-            header.classList.add('shadow-md');
-            header.classList.remove('shadow-sm');
-        } else {
-            header.classList.add('shadow-sm');
-            header.classList.remove('shadow-md');
-        }
-    });
+        fontFamily: {
+          sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        },
+      },
+    },
+  }
 </script>
-</body></html>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  
+  /* Smooth page transitions */
+  * { -webkit-tap-highlight-color: transparent; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+
+  /* Glass effect */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Hover lift on desktop */
+  @media (hover: hover) {
+    .hover-lift { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .hover-lift:hover { transform: translateY(-6px); }
+  }
+
+  /* Scanner animation */
+  .scanner-pulse { animation: scan 3s infinite ease-in-out; }
+  @keyframes scan {
+    0%, 100% { top: 8%; }
+    50% { top: 88%; }
+  }
+
+  /* Floating action button pulse */
+  @keyframes fab-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0, 77, 39, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(0, 77, 39, 0.5); }
+  }
+  .fab-pulse { animation: fab-pulse 2s infinite ease-in-out; }
+
+  /* Bottom nav safe area for notch phones */
+  .safe-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
+  /* Hide scrollbar but keep scroll */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Category card touch feedback */
+  .category-card { 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-user-select: none; user-select: none;
+  }
+  .category-card:active { transform: scale(0.97); }
+</style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+
+<!-- ===== MOBILE TOP BAR ===== -->
+<header class="sticky top-0 z-50 bg-surface/95 backdrop-blur-xl border-b border-outline-variant/20 safe-area-top">
+  <div class="flex items-center justify-between px-4 h-14 sm:h-16 max-w-screen-xl mx-auto">
+    <!-- Logo -->
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">recycling</span>
+      <span class="text-lg sm:text-xl font-extrabold text-primary tracking-tight">WroCycle</span>
+    </div>
+    <!-- Desktop Nav (hidden on mobile) -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a class="text-sm font-semibold text-primary border-b-2 border-primary pb-0.5" href="#">Główna</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Zasady</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Gra</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">O projekcie</a>
+    </nav>
+    <!-- Right: Lang + Login -->
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+        <button class="text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10">PL</button>
+        <span class="opacity-30">|</span>
+        <button class="hover:text-primary transition-colors px-1.5 py-0.5 rounded">EN</button>
+      </div>
+      <button class="hidden sm:inline-flex bg-primary text-on-primary text-xs font-semibold px-4 py-2 rounded-full hover:opacity-90 active:scale-95 transition-all">
+        Zaloguj się
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="relative overflow-hidden">
+    <!-- Background gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-waste-green/5"></div>
+    
+    <div class="relative max-w-screen-xl mx-auto px-4 sm:px-6 pt-8 pb-6 sm:pt-12 sm:pb-10 md:pt-20 md:pb-16">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+        
+        <!-- Text Content -->
+        <div class="text-center lg:text-left">
+          <!-- Eco badge -->
+          <div class="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full mb-4 sm:mb-6">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">camera_enhance</span>
+            <span class="text-xs font-semibold">Eko-Skaner AI <span class="font-normal opacity-80">/ AI Eco-Scanner</span></span>
+          </div>
+          
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface leading-tight mb-4 sm:mb-6 tracking-tight">
+            Nie wiesz gdzie wyrzucić?
+            <span class="text-primary block sm:inline"> Zeskanuj!</span>
+          </h1>
+          <p class="text-base sm:text-lg text-on-surface-variant mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Użyj aparatu, aby natychmiast rozpoznać rodzaj odpadu i przypisać go do właściwego kosza.
+            <span class="block text-sm italic opacity-70 mt-1">Use your camera to instantly identify the waste type.</span>
+          </p>
+          
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+            <button class="bg-primary text-on-primary px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 hover:shadow-lg active:scale-[0.98] transition-all fab-pulse">
+              <span class="material-symbols-outlined text-xl">photo_camera</span>
+              <span>Uruchom Skaner</span>
+            </button>
+            <button class="bg-white border-2 border-outline-variant/50 text-on-surface px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg flex items-center justify-center gap-2.5 hover:bg-surface-container-low active:scale-[0.98] transition-all">
+              <span class="material-symbols-outlined text-xl">upload_file</span>
+              <span>Prześlij Zdjęcie</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Scanner Preview (Responsive Phone Mockup) -->
+        <div class="relative mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[380px]">
+          <div class="relative bg-white p-3 sm:p-4 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl border-[3px] border-surface-container-highest overflow-hidden aspect-[3/4]">
+            <img alt="Waste Scanner Preview" 
+                 class="absolute inset-0 w-full h-full object-cover opacity-80 grayscale-[0.15] rounded-[1.5rem] sm:rounded-[2rem]" 
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsenUWgItZzo1tnWse6ysCSbvNp095BHnhfnY5myFTF4pcN02V7-m3WoYLuEIkO3thqDJDf8YevaSwvK6s59HgFii-ktU1OG3tdip6jVJZxNT_cYbMxhs-GAWzYvJMOgmr2-HscZBQDyQ9VPu_NsdLKJdBTMLEELc7mk_zK2aIl0EWugMZHfkT4bTDH6tRz4JZQJuDhQOcncAIGC28gj1P75i-L9k2GqVF9xDoNeSJkUxcV1Mq9TXbw5s3pmRUvu1D7v3gUcl7hO4D"/>
+            <!-- Scan line -->
+            <div class="scanner-pulse absolute left-3 right-3 h-0.5 bg-primary/50 shadow-[0_0_12px_rgba(0,77,39,0.4)] z-20 rounded-full"></div>
+            <!-- Viewfinder corners -->
+            <div class="absolute inset-6 sm:inset-8 border-2 border-white/30 rounded-2xl pointer-events-none"></div>
+            <!-- Analysis overlay -->
+            <div class="absolute inset-0 flex items-center justify-center z-10">
+              <div class="glass-card p-4 sm:p-5 rounded-2xl text-center max-w-[75%]">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary/15 text-primary rounded-full flex items-center justify-center mx-auto mb-2.5">
+                  <span class="material-symbols-outlined text-xl sm:text-2xl">visibility</span>
+                </div>
+                <h4 class="font-bold text-on-surface text-sm sm:text-base mb-0.5">Analizowanie...</h4>
+                <p class="text-[11px] sm:text-xs text-on-surface-variant">Analyzing... 85%</p>
+                <!-- Progress bar -->
+                <div class="mt-2.5 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+                  <div class="h-full w-[85%] bg-primary rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative blurs -->
+          <div class="absolute -top-6 -right-6 w-20 h-20 bg-waste-yellow/15 rounded-full blur-2xl"></div>
+          <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-primary/10 rounded-full blur-2xl"></div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WASTE CATEGORIES ===== -->
+  <section class="py-10 sm:py-16 md:py-20 bg-surface">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+      <!-- Section Header -->
+      <div class="mb-8 sm:mb-12">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface mb-2">
+          Pięć Filarów Segregacji
+        </h2>
+        <p class="text-sm sm:text-base text-on-surface-variant max-w-xl">
+          Poznaj zasady sortowania odpadów w Polsce.
+          <span class="italic opacity-70">Every color matters.</span>
+        </p>
+      </div>
+      
+      <!-- Horizontal Scroll on Mobile, Grid on Desktop -->
+      <div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar snap-x snap-mandatory md:grid md:grid-cols-3 lg:grid-cols-5 md:overflow-visible md:pb-0">
+        
+        <!-- Metale i Tworzywa -->
+        <div class="category-card flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto snap-start bg-white rounded-2xl p-5 sm:p-6 border-t-4 border-waste-yellow shadow-sm hover-lift">
+          <span class="material-symbols-outlined text-4xl text-waste-yellow mb-4 block" style="font-variation-settings: 'FILL' 1;">recycling</span>
+          <h3 class="font-bold text-lg mb-0.5">Metale i Tworzywa</h3>
+          <p class="text-xs text-on-surface-variant mb-3 font-medium">Metals & Plastics</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Puszki, butelki PET, kartony po sokach.</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="bg-waste-yellow/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Butelki</span>
+            <span class="bg-waste-yellow/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Puszki</span>
+            <span class="bg-waste-yellow/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Tetrapak</span>
+          </div>
+        </div>
+
+        <!-- Papier -->
+        <div class="category-card flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto snap-start bg-white rounded-2xl p-5 sm:p-6 border-t-4 border-waste-blue shadow-sm hover-lift">
+          <span class="material-symbols-outlined text-4xl text-waste-blue mb-4 block" style="font-variation-settings: 'FILL' 1;">description</span>
+          <h3 class="font-bold text-lg mb-0.5">Papier</h3>
+          <p class="text-xs text-on-surface-variant mb-3 font-medium">Paper</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Gazety, zeszyty, kartony.</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="bg-waste-blue/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Książki</span>
+            <span class="bg-waste-blue/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Karton</span>
+            <span class="bg-waste-blue/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Ulotki</span>
+          </div>
+        </div>
+
+        <!-- Szkło -->
+        <div class="category-card flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto snap-start bg-white rounded-2xl p-5 sm:p-6 border-t-4 border-waste-green shadow-sm hover-lift">
+          <span class="material-symbols-outlined text-4xl text-waste-green mb-4 block" style="font-variation-settings: 'FILL' 1;">wine_bar</span>
+          <h3 class="font-bold text-lg mb-0.5">Szkło</h3>
+          <p class="text-xs text-on-surface-variant mb-3 font-medium">Glass</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Słoiki, butelki szklane.</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="bg-waste-green/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Słoiki</span>
+            <span class="bg-waste-green/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Butelki</span>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="category-card flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto snap-start bg-white rounded-2xl p-5 sm:p-6 border-t-4 border-waste-brown shadow-sm hover-lift">
+          <span class="material-symbols-outlined text-4xl text-waste-brown mb-4 block" style="font-variation-settings: 'FILL' 1;">compost</span>
+          <h3 class="font-bold text-lg mb-0.5">Bio</h3>
+          <p class="text-xs text-on-surface-variant mb-3 font-medium">Bio-waste</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Obierki, fusy po kawie.</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="bg-waste-brown/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Obierki</span>
+            <span class="bg-waste-brown/10 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Kawa</span>
+          </div>
+        </div>
+
+        <!-- Zmieszane -->
+        <div class="category-card flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto snap-start bg-white rounded-2xl p-5 sm:p-6 border-t-4 border-waste-black shadow-sm hover-lift">
+          <span class="material-symbols-outlined text-4xl text-waste-black mb-4 block" style="font-variation-settings: 'FILL' 1;">delete</span>
+          <h3 class="font-bold text-lg mb-0.5">Zmieszane</h3>
+          <p class="text-xs text-on-surface-variant mb-3 font-medium">Mixed / Residual</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Higiena, resztki mięsa.</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="bg-gray-100 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Higiena</span>
+            <span class="bg-gray-100 text-on-surface px-2.5 py-1 rounded-full text-[11px] font-medium">Ceramika</span>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Scroll indicator dots (mobile) -->
+      <div class="flex justify-center gap-1.5 mt-4 md:hidden">
+        <div class="w-6 h-1 rounded-full bg-primary/40"></div>
+        <div class="w-1.5 h-1 rounded-full bg-primary/15"></div>
+        <div class="w-1.5 h-1 rounded-full bg-primary/15"></div>
+        <div class="w-1.5 h-1 rounded-full bg-primary/15"></div>
+        <div class="w-1.5 h-1 rounded-full bg-primary/15"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GAME CTA ===== -->
+  <section class="py-8 sm:py-12 md:py-20">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+      <div class="bg-primary-container rounded-3xl sm:rounded-[2.5rem] overflow-hidden relative">
+        <div class="flex flex-col md:flex-row items-center">
+          <!-- Text -->
+          <div class="p-8 sm:p-10 md:p-16 md:w-3/5 z-10 text-center md:text-left">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 sm:mb-4 leading-tight tracking-tight">
+              Graj i Ucz się!
+            </h2>
+            <p class="text-sm sm:text-base text-on-primary-container/90 mb-6 sm:mb-8 max-w-md mx-auto md:mx-0 leading-relaxed">
+              Sprawdź swoją wiedzę w naszej grze edukacyjnej. Przeciągnij odpad do odpowiedniego kosza!
+              <span class="block italic opacity-80 text-sm mt-1">Test your knowledge — swipe waste to the right bin!</span>
+            </p>
+            <button class="bg-white text-primary px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold text-base sm:text-lg inline-flex items-center gap-2.5 hover:bg-on-primary-container hover:text-on-surface transition-all active:scale-[0.97]">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+              <span>Uruchom Grę</span>
+            </button>
+          </div>
+          <!-- Image -->
+          <div class="md:w-2/5 h-48 sm:h-56 md:h-auto md:self-stretch relative w-full">
+            <img alt="Game Interface Preview" 
+                 class="absolute inset-0 w-full h-full object-cover" 
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcJKoZXEsVXB171bQlsXVYKb3v6ih60XpiwefhFBjogW6BI2hUetXbhuVMTIn2T4mD9kboCuBMmh0XBwbweiPNGrZ8DLmTjyx0pWTCHEsUwqlU2ompKbhvx4v5X1sTON4qKFLQCoZBBnD7qmxiUTDXsxj0rIVn62im8M3gzac6DkaWNN2TYaEErICp5r1dL4yfP4_Rt8ctY0kDiipBGea_SuapmNSYeVPChXGp6H1SE0ilu7iI6ieOpznHm2Y9ikcRG09s6X11dec_"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary-container/40 to-transparent md:bg-gradient-to-r md:from-primary-container/30 md:to-transparent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="pb-8 sm:pb-12 md:pb-20">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+      <div class="bg-surface-container-low rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 border border-outline-variant/20 text-center">
+        <h3 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
+          Chcesz wiedzieć więcej?
+        </h3>
+        <p class="text-sm sm:text-base text-on-surface-variant mb-6 max-w-lg mx-auto">
+          Zapisz się do naszego eko-poradnika.
+          <span class="italic opacity-70">Subscribe to weekly zero-waste tips.</span>
+        </p>
+        <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input class="flex-grow rounded-xl sm:rounded-full px-4 py-3 sm:px-5 border border-outline-variant/40 focus:ring-2 focus:ring-primary focus:border-primary bg-white text-sm" placeholder="Twój adres e-mail" type="email"/>
+          <button class="bg-primary text-on-primary px-6 py-3 rounded-xl sm:rounded-full font-semibold text-sm whitespace-nowrap active:scale-[0.97] transition-transform">
+            Zapisz się
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/20 mt-auto safe-bottom">
+  <div class="max-w-screen-xl mx-auto py-8 sm:py-10 px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="flex flex-col items-center sm:items-start gap-1.5">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+        <span class="font-bold text-primary text-base">WroCycle</span>
+      </div>
+      <p class="text-xs text-on-surface-variant text-center sm:text-left">
+        © 2024 EkoSzkoła Polska · Razem dla czystej planety
+      </p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Polityka</a>
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Kontakt</a>
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Poradnik</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MOBILE BOTTOM NAV (visible < md) ===== -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-outline-variant/20 md:hidden safe-bottom">
+  <div class="grid grid-cols-4 h-14">
+    <a class="flex flex-col items-center justify-center gap-0.5 text-primary" href="#">
+      <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">home</span>
+      <span class="text-[10px] font-semibold">Główna</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined text-xl">menu_book</span>
+      <span class="text-[10px] font-medium">Zasady</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined text-xl">sports_esports</span>
+      <span class="text-[10px] font-medium">Gra</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined text-xl">info</span>
+      <span class="text-[10px] font-medium">O nas</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Spacer for bottom nav -->
+<div class="h-14 md:hidden"></div>
+
+<script>
+  // Scroll shadow on header
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    header.classList.toggle('shadow-md', window.scrollY > 10);
+  });
+</script>
+</body>
+</html>
