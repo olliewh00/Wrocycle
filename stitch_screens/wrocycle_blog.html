@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0" name="viewport"/>
+<title>WroCycle | Blog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "waste-yellow": "#FFD200",
+          "primary-fixed-dim": "#83d99c",
+          "surface-container-highest": "#e1e3e4",
+          "on-primary": "#ffffff",
+          "primary-container": "#006837",
+          "secondary": "#00658d",
+          "background": "#f8f9fa",
+          "on-surface": "#191c1d",
+          "surface": "#f8f9fa",
+          "primary": "#004d27",
+          "waste-black": "#1A1A1A",
+          "on-primary-container": "#8ee4a6",
+          "surface-variant": "#e1e3e4",
+          "surface-container": "#edeeef",
+          "surface-container-lowest": "#ffffff",
+          "clean-white": "#FFFFFF",
+          "outline-variant": "#bec9be",
+          "primary-fixed": "#9ef6b6",
+          "waste-brown": "#8C6239",
+          "surface-dim": "#d9dadb",
+          "surface-container-low": "#f3f4f5",
+          "waste-blue": "#0072BC",
+          "surface-container-high": "#e7e8e9",
+          "on-surface-variant": "#3f4940",
+          "outline": "#6f7a70",
+          "waste-green": "#009444"
+        },
+        fontFamily: { sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"] },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  * { -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+  .safe-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  @media (hover: hover) {
+    .blog-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+    .blog-card:hover .blog-image img { transform: scale(1.05); }
+  }
+  .blog-card:active { transform: scale(0.98); }
+  .blog-image img { transition: transform 0.4s ease; }
+  .read-time { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+</style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+
+<!-- ===== TOP BAR ===== -->
+<header class="sticky top-0 z-50 bg-surface/95 backdrop-blur-xl border-b border-outline-variant/20">
+  <div class="flex items-center justify-between px-4 h-14 sm:h-16 max-w-screen-xl mx-auto">
+    <a href="wrocycle_home.html" class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">recycling</span>
+      <span class="text-lg sm:text-xl font-extrabold text-primary tracking-tight">WroCycle</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6">
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="wrocycle_home.html" data-i18n="nav_home">Główna</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#" data-i18n="nav_rules">Zasady</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="wrocycle_game.html" data-i18n="nav_game">Gra</a>
+      <a class="text-sm font-semibold text-primary border-b-2 border-primary pb-0.5" href="#">Blog</a>
+      <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#" data-i18n="nav_about">O projekcie</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+        <button id="lang-pl" onclick="setLang('pl')" class="text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10">PL</button>
+        <span class="opacity-30">|</span>
+        <button id="lang-en" onclick="setLang('en')" class="hover:text-primary transition-colors px-1.5 py-0.5 rounded">EN</button>
+      </div>
+      <button class="hidden sm:inline-flex bg-primary text-on-primary text-xs font-semibold px-4 py-2 rounded-full hover:opacity-90 active:scale-95 transition-all" data-i18n="nav_login">Zaloguj się</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== BLOG HERO ===== -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-waste-green/3"></div>
+    <div class="relative max-w-screen-xl mx-auto px-4 sm:px-6 pt-8 pb-6 sm:pt-12 sm:pb-8 md:pt-16 md:pb-12">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full mb-4">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">article</span>
+          <span class="text-xs font-semibold" data-i18n="hero_badge">Eko-Blog</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-on-surface leading-tight mb-3 tracking-tight" data-i18n="hero_title">Lorem Ipsum <span class="text-primary">Dolor Sit</span></h1>
+        <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed" data-i18n="hero_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BLOG POSTS ===== -->
+  <section class="py-6 sm:py-10 md:py-14">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+
+        <!-- POST 1 -->
+        <article class="blog-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-outline-variant/15 shadow-sm cursor-pointer">
+          <div class="blog-image relative aspect-[16/10] overflow-hidden bg-surface-container">
+            <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop" alt="Placeholder" class="w-full h-full object-cover"/>
+            <div class="absolute top-3 left-3">
+              <span class="bg-waste-green text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm" data-i18n="cat_1">Lorem</span>
+            </div>
+            <div class="absolute bottom-3 right-3">
+              <span class="read-time bg-black/50 text-white text-[10px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">schedule</span> 5 min
+              </span>
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs text-on-surface-variant font-medium">25 Nov 2026</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <span class="text-xs text-on-surface-variant">Lorem</span>
+            </div>
+            <h2 class="font-bold text-lg sm:text-xl text-on-surface leading-snug mb-2.5" data-i18n="post1_title">Lorem ipsum dolor sit amet consectetur</h2>
+            <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings: 'FILL' 1;">person</span>
+                </div>
+                <span class="text-xs font-semibold text-on-surface">Lorem Ipsum</span>
+              </div>
+              <span class="text-primary text-xs font-semibold flex items-center gap-0.5" data-i18n="read_more">Czytaj więcej <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+            </div>
+          </div>
+        </article>
+
+        <!-- POST 2 -->
+        <article class="blog-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-outline-variant/15 shadow-sm cursor-pointer">
+          <div class="blog-image relative aspect-[16/10] overflow-hidden bg-surface-container">
+            <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?q=80&w=800&auto=format&fit=crop" alt="Placeholder" class="w-full h-full object-cover"/>
+            <div class="absolute top-3 left-3">
+              <span class="bg-waste-blue text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm" data-i18n="cat_2">Ipsum</span>
+            </div>
+            <div class="absolute bottom-3 right-3">
+              <span class="read-time bg-black/50 text-white text-[10px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">schedule</span> 3 min
+              </span>
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs text-on-surface-variant font-medium">18 Nov 2026</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <span class="text-xs text-on-surface-variant">Ipsum</span>
+            </div>
+            <h2 class="font-bold text-lg sm:text-xl text-on-surface leading-snug mb-2.5" data-i18n="post2_title">Pellentesque habitant morbi tristique senectus</h2>
+            <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">person</span>
+                </div>
+                <span class="text-xs font-semibold text-on-surface">Dolor Amet</span>
+              </div>
+              <span class="text-primary text-xs font-semibold flex items-center gap-0.5" data-i18n="read_more">Czytaj więcej <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+            </div>
+          </div>
+        </article>
+
+        <!-- POST 3 -->
+        <article class="blog-card bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-outline-variant/15 shadow-sm cursor-pointer">
+          <div class="blog-image relative aspect-[16/10] overflow-hidden bg-surface-container">
+            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800&auto=format&fit=crop" alt="Placeholder" class="w-full h-full object-cover"/>
+            <div class="absolute top-3 left-3">
+              <span class="bg-waste-brown text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm" data-i18n="cat_3">Dolor</span>
+            </div>
+            <div class="absolute bottom-3 right-3">
+              <span class="read-time bg-black/50 text-white text-[10px] sm:text-[11px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">schedule</span> 7 min
+              </span>
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs text-on-surface-variant font-medium">10 Nov 2026</span>
+              <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+              <span class="text-xs text-on-surface-variant">Dolor</span>
+            </div>
+            <h2 class="font-bold text-lg sm:text-xl text-on-surface leading-snug mb-2.5" data-i18n="post3_title">Curabitur pretium tincidunt lacus nulla</h2>
+            <p class="text-sm text-on-surface-variant leading-relaxed mb-4">Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-waste-brown/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-waste-brown text-base" style="font-variation-settings: 'FILL' 1;">person</span>
+                </div>
+                <span class="text-xs font-semibold text-on-surface">Sit Amet</span>
+              </div>
+              <span class="text-primary text-xs font-semibold flex items-center gap-0.5" data-i18n="read_more">Czytaj więcej <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Load more -->
+      <div class="flex justify-center mt-8 sm:mt-12">
+        <button class="bg-white border-2 border-outline-variant/40 text-on-surface px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-low active:scale-[0.97] transition-all" data-i18n="load_more">
+          <span class="material-symbols-outlined text-lg">expand_more</span>
+          Załaduj więcej
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="pb-8 sm:pb-12 md:pb-20">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6">
+      <div class="bg-primary-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-center">
+        <span class="material-symbols-outlined text-on-primary-container text-4xl mb-3 block" style="font-variation-settings: 'FILL' 1;">mail</span>
+        <h3 class="text-xl sm:text-2xl font-bold text-white mb-2" data-i18n="newsletter_title">Lorem ipsum dolor sit</h3>
+        <p class="text-sm text-on-primary-container/80 mb-6 max-w-md mx-auto" data-i18n="newsletter_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p>
+        <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="return false;">
+          <input class="flex-grow rounded-xl sm:rounded-full px-4 py-3 sm:px-5 border-0 focus:ring-2 focus:ring-white/50 bg-white/90 text-on-surface text-sm placeholder:text-on-surface-variant/60" data-i18n-placeholder="email_placeholder" placeholder="Twój adres e-mail" type="email"/>
+          <button class="bg-white text-primary px-6 py-3 rounded-xl sm:rounded-full font-semibold text-sm whitespace-nowrap active:scale-[0.97] transition-transform hover:bg-on-primary-container" data-i18n="subscribe_btn">Zapisz się</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/20 mt-auto safe-bottom">
+  <div class="max-w-screen-xl mx-auto py-8 sm:py-10 px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="flex flex-col items-center sm:items-start gap-1.5">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+        <span class="font-bold text-primary text-base">WroCycle</span>
+      </div>
+      <p class="text-xs text-on-surface-variant text-center sm:text-left" data-i18n="footer_copy">© 2024 EkoSzkoła Polska · Lorem ipsum dolor sit amet</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#" data-i18n="footer_privacy">Polityka</a>
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#" data-i18n="footer_contact">Kontakt</a>
+      <a class="text-xs font-medium text-on-surface-variant hover:text-primary transition-colors" href="#" data-i18n="footer_guide">Poradnik</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-outline-variant/20 md:hidden safe-bottom">
+  <div class="grid grid-cols-4 h-14">
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="wrocycle_home.html">
+      <span class="material-symbols-outlined text-xl">home</span>
+      <span class="text-[10px] font-medium" data-i18n="tab_home">Główna</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined text-xl">menu_book</span>
+      <span class="text-[10px] font-medium" data-i18n="tab_rules">Zasady</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-primary" href="#">
+      <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">article</span>
+      <span class="text-[10px] font-semibold">Blog</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="wrocycle_game.html">
+      <span class="material-symbols-outlined text-xl">sports_esports</span>
+      <span class="text-[10px] font-medium" data-i18n="tab_game">Gra</span>
+    </a>
+  </div>
+</nav>
+<div class="h-14 md:hidden"></div>
+
+<script>
+  // ===== i18n =====
+  const translations = {
+    pl: {
+      nav_home: "Główna",
+      nav_rules: "Zasady",
+      nav_game: "Gra",
+      nav_about: "O projekcie",
+      nav_login: "Zaloguj się",
+      hero_badge: "Eko-Blog",
+      hero_title: 'Lorem Ipsum <span class="text-primary">Dolor Sit</span>',
+      hero_subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+      cat_1: "Lorem", cat_2: "Ipsum", cat_3: "Dolor",
+      post1_title: "Lorem ipsum dolor sit amet consectetur",
+      post2_title: "Pellentesque habitant morbi tristique senectus",
+      post3_title: "Curabitur pretium tincidunt lacus nulla",
+      read_more: 'Czytaj więcej <span class="material-symbols-outlined text-sm">arrow_forward</span>',
+      load_more: '<span class="material-symbols-outlined text-lg">expand_more</span> Załaduj więcej',
+      newsletter_title: "Lorem ipsum dolor sit",
+      newsletter_desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+      email_placeholder: "Twój adres e-mail",
+      subscribe_btn: "Zapisz się",
+      footer_copy: "© 2024 EkoSzkoła Polska · Lorem ipsum dolor sit amet",
+      footer_privacy: "Polityka",
+      footer_contact: "Kontakt",
+      footer_guide: "Poradnik",
+      tab_home: "Główna",
+      tab_rules: "Zasady",
+      tab_game: "Gra",
+    },
+    en: {
+      nav_home: "Home",
+      nav_rules: "Rules",
+      nav_game: "Game",
+      nav_about: "About",
+      nav_login: "Log in",
+      hero_badge: "Eco-Blog",
+      hero_title: 'Lorem Ipsum <span class="text-primary">Dolor Sit</span>',
+      hero_subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+      cat_1: "Lorem", cat_2: "Ipsum", cat_3: "Dolor",
+      post1_title: "Lorem ipsum dolor sit amet consectetur",
+      post2_title: "Pellentesque habitant morbi tristique senectus",
+      post3_title: "Curabitur pretium tincidunt lacus nulla",
+      read_more: 'Read more <span class="material-symbols-outlined text-sm">arrow_forward</span>',
+      load_more: '<span class="material-symbols-outlined text-lg">expand_more</span> Load more',
+      newsletter_title: "Lorem ipsum dolor sit",
+      newsletter_desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+      email_placeholder: "Your email address",
+      subscribe_btn: "Subscribe",
+      footer_copy: "© 2024 EkoSzkoła Polska · Lorem ipsum dolor sit amet",
+      footer_privacy: "Privacy",
+      footer_contact: "Contact",
+      footer_guide: "Guide",
+      tab_home: "Home",
+      tab_rules: "Rules",
+      tab_game: "Game",
+    }
+  };
+
+  let currentLang = localStorage.getItem('wrocycle_lang') || 'pl';
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('wrocycle_lang', lang);
+    document.documentElement.lang = lang;
+
+    // Toggle button styles
+    document.getElementById('lang-pl').className = lang === 'pl'
+      ? 'text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10'
+      : 'hover:text-primary transition-colors px-1.5 py-0.5 rounded';
+    document.getElementById('lang-en').className = lang === 'en'
+      ? 'text-primary font-bold px-1.5 py-0.5 rounded bg-primary/10'
+      : 'hover:text-primary transition-colors px-1.5 py-0.5 rounded';
+
+    // Apply translations
+    const t = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (t[key] !== undefined) el.placeholder = t[key];
+    });
+  }
+
+  // Init
+  setLang(currentLang);
+</script>
+</body>
+</html>
