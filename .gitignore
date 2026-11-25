@@ -1,5 +1,6 @@
 # Local environment configuration
 .env
+.venv/
 
 # Python caching
 __pycache__/

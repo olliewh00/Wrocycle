@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: wrocycle
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.8"
+      - key: GEMINI_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GEMINI_API_KEY
+        sync: false
